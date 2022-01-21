@@ -1,8 +1,15 @@
 from secrets import compare_digest
+from typing import Any
 
 from fastapi import HTTPException, Security
 from fastapi.security import APIKeyCookie, APIKeyHeader
+from starlette.responses import JSONResponse
 from starlette.status import HTTP_401_UNAUTHORIZED, HTTP_403_FORBIDDEN
+
+try:
+    import rapidjson as json
+except ImportError:
+    import json
 
 from .config import get_settings
 
@@ -25,3 +32,11 @@ def verify_api_key(key: str = Depends(get_api_key)):
             status_code=HTTP_401_UNAUTHORIZED, detail="Authentication provided invalid"
         )
     return key
+
+
+
+
+
+class JSONResponseAccelerated(JSONResponse):
+    def render(self, content: Any) -> bytes:
+        return json.dumps(content, ensure_ascii=False).encode("utf-8")

@@ -1,0 +1,7 @@
+{
+  "short_name": "List Manager",
+  "name": "Manage lists, using a REST api and a web front-end",
+  "icons": [],
+  "start_url": ".",
+  "display": "standalone"
+}

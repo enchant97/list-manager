@@ -1,6 +1,8 @@
 # web framework
 fastapi
 uvicorn
+# database
+tortoise-orm
 # models
 pydantic[dotenv]
 # json accelerator (optional)

@@ -1,5 +1,4 @@
 from functools import lru_cache
-from pathlib import Path
 from typing import Optional
 
 from pydantic import BaseSettings
@@ -8,7 +7,7 @@ from pydantic import BaseSettings
 class Settings(BaseSettings):
     ROOT_URL: Optional[str] = None
     API_KEY: str
-    DATA_PATH: Path
+    DB_URI: str
 
     class Config:
         env_file = '.env'

@@ -1,7 +1,7 @@
 from datetime import datetime
 from typing import Optional
 
-from pydantic import BaseModel
+from pydantic import BaseModel, constr
 
 
 class BaseMeta(BaseModel):
@@ -11,28 +11,28 @@ class BaseMeta(BaseModel):
 
 class ItemList(BaseMeta):
     id: int
-    title: str
-    description: Optional[str]
+    title: constr(strip_whitespace=True, min_length=1, max_length=80)
+    description: Optional[constr(strip_whitespace=True, max_length=255)]
 
 
 class ItemListCreate(BaseModel):
-    title: str
-    description: Optional[str]
+    title: constr(strip_whitespace=True, min_length=1, max_length=80)
+    description: Optional[constr(strip_whitespace=True, max_length=255)]
 
 
 class ItemListUpdate(BaseModel):
-    title: Optional[str] = None
-    description: Optional[str] = None
+    title: Optional[constr(strip_whitespace=True, min_length=1, max_length=80)] = None
+    description: Optional[constr(strip_whitespace=True, max_length=255)] = None
 
 
 class ListItem(BaseMeta):
     id: int
-    title: str
+    title: constr(strip_whitespace=True, min_length=1, max_length=80)
 
 
 class ListItemCreate(BaseModel):
-    title: str
+    title: constr(strip_whitespace=True, min_length=1, max_length=80)
 
 
 class ListItemUpdate(BaseModel):
-    title: Optional[str] = None
+    title: Optional[constr(strip_whitespace=True, min_length=1, max_length=80)] = None

@@ -1,0 +1,7 @@
+# web framework
+fastapi
+uvicorn
+# models
+pydantic[dotenv]
+# json accelerator (optional)
+python-rapidjson

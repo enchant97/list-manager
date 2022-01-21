@@ -1,7 +1,7 @@
 from secrets import compare_digest
 from typing import Any
 
-from fastapi import HTTPException, Security
+from fastapi import HTTPException, Security, Depends
 from fastapi.security import APIKeyCookie, APIKeyHeader
 from starlette.responses import JSONResponse
 from starlette.status import HTTP_401_UNAUTHORIZED, HTTP_403_FORBIDDEN

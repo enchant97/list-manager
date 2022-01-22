@@ -9,19 +9,21 @@ function ListManager() {
   const navigate = useNavigate();
   const { login } = useContext(LoginContext);
   const [item_lists, setItemLists] = useState<ItemList[]>([]);
+
   const update_lists = async () => {
     // TODO: add more error handling
     if (login !== null) { setItemLists(await getLists(login)); }
     else {
       { navigate("/login"); }
     }
-  }
+  };
+
   useEffect(() => { update_lists() }, []);
 
   return (
     <div>
       <h1>Lists</h1>
-      {item_lists.map((row, i) => <List key={row.id} item_list={row} />)}
+      {item_lists.map((row) => <List key={row.id} item_list={row} />)}
     </div>
   );
 }

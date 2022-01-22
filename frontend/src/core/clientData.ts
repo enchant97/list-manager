@@ -1,10 +1,7 @@
+import { LoginDetails } from "./types";
+
 const API_URL_KEY = 'api_url';
 const API_KEY_KEY = 'api_key';
-
-export type LoginDetails = {
-  api_url: string;
-  api_key: string;
-}
 
 export function getLoginDetails(): LoginDetails | null {
   let api_url = window.localStorage.getItem(API_URL_KEY);

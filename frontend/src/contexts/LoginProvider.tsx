@@ -1,5 +1,6 @@
 import { useState, createContext } from "react";
-import { getLoginDetails, LoginDetails, removeLoginDetails, setLoginDetails } from "../core/clientData";
+import { LoginDetails } from "../core/types";
+import { getLoginDetails, removeLoginDetails, setLoginDetails } from "../core/clientData";
 
 export type LoginContextType = {
   login: LoginDetails | null;

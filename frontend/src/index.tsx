@@ -1,20 +1,27 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import reportWebVitals from './reportWebVitals';
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import App from './components/App';
-import Header from './components/Header';
-import Footer from './components/Footer';
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+import LoginProvider from "./contexts/LoginProvider";
+import App from './App';
+import Footer from "./components/Footer";
+import Header from "./components/Header";
+import Login from "./components/Login";
+import Logout from "./components/Logout";
 
 ReactDOM.render(
   <React.StrictMode>
-    <Header />
     <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<App />} />
-      </Routes>
+      <LoginProvider>
+        <Header />
+        <Routes>
+          <Route path="/" element={<App />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/logout" element={<Logout />} />
+        </Routes>
+        <Footer />
+      </LoginProvider>
     </BrowserRouter>
-    <Footer />
   </React.StrictMode>,
   document.getElementById('root')
 );

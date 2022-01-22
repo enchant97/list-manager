@@ -1,13 +1,14 @@
 import { useContext } from "react";
 import { Link } from "react-router-dom";
 import { LoginContext } from "../contexts/LoginProvider";
+import styles from  "../styles/Header.module.css"
 
 function Header() {
   const { isLoggedIn } = useContext(LoginContext);
   return (
-    <header>
+    <header className={styles['header']}>
       <h1>List Manager</h1>
-      <nav>
+      <nav className={styles['nav']}>
         <Link to="/">Home</Link>
         {isLoggedIn() !== false
           ? <> <Link to="/lists">Lists</Link>

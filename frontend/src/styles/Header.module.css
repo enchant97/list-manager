@@ -1,0 +1,16 @@
+.header {
+  display: flex;
+  align-items: center;
+}
+
+.header :first-child {
+  margin-right: auto;
+}
+
+.nav {
+  display: flex;
+}
+
+.nav a {
+  padding: 6px;
+}

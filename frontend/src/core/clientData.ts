@@ -24,9 +24,9 @@ export function removeLoginDetails() {
 }
 
 /**
- * gets either the configured api url or the guessed url (origin + /api)
+ * gets either the configured api url (set when react build is run) or the guessed url (origin + /api)
  * @returns the absolute api url
  */
 export function getApiUrl(): string {
-  return window.localStorage.getItem(API_URL_KEY) || window.location.origin + '/api';
+  return window.localStorage.getItem(API_URL_KEY) || process.env.REACT_APP_API_URL || (new URL("/api", window.location.origin)).toString();
 }

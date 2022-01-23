@@ -4,6 +4,7 @@ import ListItemTable from "../components/ListItemTable";
 import { LoginContext } from "../contexts/LoginProvider";
 import { deleteListItemById, getListById, getListItemsByList } from "../core/api";
 import { ItemList, ListItem } from "../core/types";
+import styles from "../styles/Core.module.css";
 
 function ItemManager() {
   const navigate = useNavigate();
@@ -39,7 +40,7 @@ function ItemManager() {
       <h1>Items</h1>
       <h2>{list?.title}</h2>
       <p>{list?.description}</p>
-      <Link to={`/lists/${list_id}/new-item`}>New Item</Link>
+      <Link className={styles.button} to={`/lists/${list_id}/new-item`}>New Item</Link>
       <ListItemTable list_items={list_items} onDeleteRowClick={itemRowDelete} />
     </div>
   );

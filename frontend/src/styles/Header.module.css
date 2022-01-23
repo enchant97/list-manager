@@ -7,10 +7,11 @@
   margin-right: auto;
 }
 
-.nav {
+.header .nav {
   display: flex;
+  gap: 4px;
 }
 
-.nav a {
+.header .nav a {
   padding: 6px;
 }

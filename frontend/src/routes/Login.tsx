@@ -2,6 +2,7 @@ import React, { useContext, useState } from "react";
 import { getApiUrl } from "../core/clientData";
 import { LoginContext } from "../contexts/LoginProvider";
 import { useNavigate } from "react-router-dom";
+import styles from "../styles/Core.module.css";
 
 function Login() {
   const { login, setLogin } = useContext(LoginContext);
@@ -25,13 +26,13 @@ function Login() {
   }
 
   return (
-    <form onSubmit={handleSubmit}>
-      <h1>Login</h1>
+    <form className={[styles.container, styles.twoCol].join(" ")} onSubmit={handleSubmit}>
+      <h1 className={styles.fillBoth}>Login</h1>
       <label htmlFor="api_url">Api Url:</label>
       <input type="text" id="api_url" name="api_url" autoComplete="username" value={api_url} onChange={handleApiUrlChange} required />
       <label htmlFor="api_key">Api Key:</label>
-      <input type="password" id="api_key" name="api_key" autoComplete="current-password" value={api_key} onChange={handleApiKeyChange} required />     
-      <button type="submit">Login</button>
+      <input type="password" id="api_key" name="api_key" autoComplete="current-password" value={api_key} onChange={handleApiKeyChange} required />
+      <button className={styles.fillBoth} type="submit">Login</button>
     </form>
   );
 }

@@ -2,6 +2,7 @@ import { useContext, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { LoginContext } from "../contexts/LoginProvider";
 import { newListItem } from "../core/api";
+import styles from "../styles/Core.module.css";
 
 export type NewItemState = {
   title: string;
@@ -27,15 +28,15 @@ function NewItem() {
   useEffect(() => { if (login === null) { navigate("/login"); } });
 
   return (
-    <form onSubmit={handleSubmit}>
-      <h1>New Item</h1>
+    <form className={styles.twoCol} onSubmit={handleSubmit}>
+      <h1 className={styles.fillBoth}>New Item</h1>
       <label htmlFor="new-item-title">Title</label>
       <input
         type="text" name="new-item-title" id="new-item-title"
         value={new_item.title} onChange={handleTitleChange} maxLength={80} autoFocus required
       />
-      <button type="submit">Create</button>
-      <button type="button" onClick={() => navigate(-1)}>Go Back</button>
+      <button className={styles.fillBoth} type="submit">Create</button>
+      <button className={styles.fillBoth} type="button" onClick={() => navigate(-1)}>Go Back</button>
     </form>
   );
 }

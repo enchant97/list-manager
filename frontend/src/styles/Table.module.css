@@ -1,0 +1,7 @@
+.listsTable {
+  width: 100%;
+}
+
+.listsTable tbody :first-child {
+  width: 100%;
+}

@@ -1,5 +1,6 @@
 import { ItemList } from "../core/types";
 import ListRow from "./ListRow";
+import style from '../styles/Table.module.css'
 
 export type ListTableProps = {
   item_lists: ItemList[];
@@ -9,7 +10,7 @@ export type ListTableProps = {
 
 function ListTable(props: ListTableProps) {
   return (
-    <table>
+    <table className={style.listsTable}>
       <tbody>
         {props.item_lists.map((row) => <ListRow key={row.id} item_list={row} onViewClick={props.onListRowClick} onDeleteClick={props.onListRowDeleteClick} />)}
       </tbody>

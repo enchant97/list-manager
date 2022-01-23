@@ -4,6 +4,7 @@ import { LoginContext } from "../contexts/LoginProvider";
 import { ItemList } from "../core/types";
 import { deleteListById, getLists } from "../core/api";
 import ListTable from "../components/ListTable";
+import styles from "../styles/Core.module.css";
 
 function ListManager() {
   const navigate = useNavigate();
@@ -32,7 +33,7 @@ function ListManager() {
   return (
     <div>
       <h1>Lists</h1>
-      <Link to={"/lists/new"}>New List</Link>
+      <Link className={styles.button} to={"/lists/new"}>New List</Link>
       <ListTable item_lists={item_lists} onListRowClick={handleListRowClick} onListRowDeleteClick={handleListRowDeleteClick} />
     </div>
   );

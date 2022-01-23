@@ -1,7 +1,8 @@
 import { useContext } from "react";
 import { Link } from "react-router-dom";
 import { LoginContext } from "../contexts/LoginProvider";
-import styles from  "../styles/Header.module.css"
+import styles from  "../styles/Header.module.css";
+import coreStyles from "../styles/Core.module.css";
 
 function Header() {
   const { isLoggedIn } = useContext(LoginContext);
@@ -9,12 +10,12 @@ function Header() {
     <header className={styles['header']}>
       <h1>List Manager</h1>
       <nav className={styles['nav']}>
-        <Link to="/">Home</Link>
+        <Link className={coreStyles.button} to="/">Home</Link>
         {isLoggedIn() !== false
-          ? <> <Link to="/lists">Lists</Link>
-            <Link to="/logout">Logout</Link>
+          ? <> <Link className={coreStyles.button} to="/lists">Lists</Link>
+            <Link className={coreStyles.button} to="/logout">Logout</Link>
           </>
-          : <Link to="/login">Login</Link>
+          : <Link className={coreStyles.button} to="/login">Login</Link>
         }
       </nav>
     </header>

@@ -1,6 +1,6 @@
 import { useContext, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import ListItemRow from "../components/ListItemRow";
+import ListItemTable from "../components/ListItemTable";
 import { LoginContext } from "../contexts/LoginProvider";
 import { deleteListItemById, getListById, getListItemsByList } from "../core/api";
 import { ItemList, ListItem } from "../core/types";
@@ -39,17 +39,7 @@ function ItemManager() {
       <h1>Items</h1>
       <h2>{list?.title}</h2>
       <p>{list?.description}</p>
-      <table>
-        <thead>
-          <tr>
-            <th>Name</th>
-            <th></th>
-          </tr>
-        </thead>
-        <tbody>
-          {list_items.map((row) => <ListItemRow key={row.id} item={row} onDeleteClick={itemRowDelete} />)}
-        </tbody>
-      </table>
+      <ListItemTable list_items={list_items} onDeleteRowClick={itemRowDelete} />
     </div>
   );
 }

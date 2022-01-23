@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { LoginContext } from "../contexts/LoginProvider";
 import { ItemList } from "../core/types";
 import { getLists } from "../core/api";
-import List from "../components/List";
+import ListTable from "../components/ListTable";
 
 function ListManager() {
   const navigate = useNavigate();
@@ -17,13 +17,14 @@ function ListManager() {
       { navigate("/login"); }
     }
   };
+  const handleListRowClick = (list_id: number) => navigate(`/lists/${list_id}`);
 
   useEffect(() => { update_lists() }, []);
 
   return (
     <div>
       <h1>Lists</h1>
-      {item_lists.map((row) => <List key={row.id} item_list={row} />)}
+      <ListTable item_lists={item_lists} onListRowClick={handleListRowClick}/>
     </div>
   );
 }

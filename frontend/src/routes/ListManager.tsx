@@ -2,7 +2,7 @@ import { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { LoginContext } from "../contexts/LoginProvider";
 import { ItemList } from "../core/types";
-import { getLists } from "../core/api";
+import { deleteListById, getLists } from "../core/api";
 import ListTable from "../components/ListTable";
 
 function ListManager() {
@@ -18,13 +18,21 @@ function ListManager() {
     }
   };
   const handleListRowClick = (list_id: number) => navigate(`/lists/${list_id}`);
+  const handleListRowDeleteClick = async (list_id: number) => {
+    let found_index = item_lists.findIndex(row => row.id === list_id);
+    if (found_index !== -1 && login && list_id) {
+      await deleteListById(login, list_id);
+      let new_lists = item_lists.filter((_, i) => i !== found_index);
+      setItemLists(new_lists);
+    }
+  };
 
   useEffect(() => { update_lists() }, []);
 
   return (
     <div>
       <h1>Lists</h1>
-      <ListTable item_lists={item_lists} onListRowClick={handleListRowClick}/>
+      <ListTable item_lists={item_lists} onListRowClick={handleListRowClick} onListRowDeleteClick={handleListRowDeleteClick}/>
     </div>
   );
 }

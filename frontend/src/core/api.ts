@@ -25,6 +25,14 @@ export async function getListById(login_details: LoginDetails, list_id: number):
   return json;
 }
 
+export async function deleteListById(login_details: LoginDetails, list_id: number) {
+  const url = new URL(`/lists/${list_id}`, login_details.api_url);
+  await fetch(url.toString(), {
+    method: "DELETE",
+    headers: createHeaders(login_details.api_key),
+  });
+}
+
 export async function getListItemsByList(login_details: LoginDetails, list_id: number): Promise<ListItem[]> {
   const url = new URL(`/lists/${list_id}/items`, login_details.api_url);
   const response = await fetch(url.toString(), {

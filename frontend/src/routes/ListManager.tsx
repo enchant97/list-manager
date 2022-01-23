@@ -1,5 +1,5 @@
 import { useContext, useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { LoginContext } from "../contexts/LoginProvider";
 import { ItemList } from "../core/types";
 import { deleteListById, getLists } from "../core/api";
@@ -32,7 +32,8 @@ function ListManager() {
   return (
     <div>
       <h1>Lists</h1>
-      <ListTable item_lists={item_lists} onListRowClick={handleListRowClick} onListRowDeleteClick={handleListRowDeleteClick}/>
+      <Link to={"/lists/new"}>New List</Link>
+      <ListTable item_lists={item_lists} onListRowClick={handleListRowClick} onListRowDeleteClick={handleListRowDeleteClick} />
     </div>
   );
 }

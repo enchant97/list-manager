@@ -1,4 +1,4 @@
-import { ItemList, ListItem, LoginDetails } from "./types";
+import { ItemList, ItemListCreate, ListItem, LoginDetails } from "./types";
 
 function createHeaders(api_token: string) {
   return {
@@ -13,6 +13,17 @@ export async function getLists(login_details: LoginDetails): Promise<ItemList[]>
     headers: createHeaders(login_details.api_key),
   });
   const json: ItemList[] = await response.json();
+  return json;
+}
+
+export async function newList(login_details: LoginDetails, new_list: ItemListCreate): Promise<ItemList> {
+  const url = new URL("/lists", login_details.api_url);
+  const response = await fetch(url.toString(), {
+    method: "POST",
+    headers: createHeaders(login_details.api_key),
+    body: JSON.stringify(new_list),
+  });
+  const json: ItemList = await response.json();
   return json;
 }
 

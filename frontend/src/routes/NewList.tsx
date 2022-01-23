@@ -36,6 +36,7 @@ function NewList() {
       <label htmlFor="new-list-desc">Description</label>
       <input type="text" name="new-list-desc" id="new-list-desc" value={new_list.description} onChange={handleDescriptionChange} maxLength={255} />
       <button type="submit">Create</button>
+      <button type="button" onClick={() => navigate(-1)}>Go Back</button>
     </form>
   );
 }

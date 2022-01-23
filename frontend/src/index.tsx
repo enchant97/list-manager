@@ -11,6 +11,7 @@ import Logout from "./routes/Logout";
 import ListManager from './routes/ListManager';
 import ItemManager from './routes/ItemManager';
 import NewList from './routes/NewList';
+import NewItem from './routes/NewItem';
 
 ReactDOM.render(
   <React.StrictMode>
@@ -22,6 +23,7 @@ ReactDOM.render(
           <Route path="/lists" element={<ListManager />} />
           <Route path="/lists/new" element={<NewList />} />
           <Route path="/lists/:list_id" element={<ItemManager />} />
+          <Route path="/lists/:list_id/new-item" element={<NewItem />} />
           <Route path="/login" element={<Login />} />
           <Route path="/logout" element={<Logout />} />
         </Routes>

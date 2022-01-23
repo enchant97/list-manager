@@ -1,4 +1,4 @@
-import { ItemList, ItemListCreate, ListItem, LoginDetails } from "./types";
+import { ItemList, ItemListCreate, ListItem, ListItemCreate, LoginDetails } from "./types";
 
 function createHeaders(api_token: string) {
   return {
@@ -50,6 +50,17 @@ export async function getListItemsByList(login_details: LoginDetails, list_id: n
     headers: createHeaders(login_details.api_key),
   });
   const json: ListItem[] = await response.json();
+  return json;
+}
+
+export async function newListItem(login_details: LoginDetails, list_id: number, new_item: ListItemCreate) {
+  const url = new URL(`/lists/${list_id}/items`, login_details.api_url);
+  const response = await fetch(url.toString(), {
+    method: "POST",
+    headers: createHeaders(login_details.api_key),
+    body: JSON.stringify(new_item),
+  });
+  const json: ListItem = await response.json();
   return json;
 }
 

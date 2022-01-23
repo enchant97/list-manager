@@ -1,5 +1,5 @@
 import { useContext, useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import ListItemTable from "../components/ListItemTable";
 import { LoginContext } from "../contexts/LoginProvider";
 import { deleteListItemById, getListById, getListItemsByList } from "../core/api";
@@ -39,6 +39,7 @@ function ItemManager() {
       <h1>Items</h1>
       <h2>{list?.title}</h2>
       <p>{list?.description}</p>
+      <Link to={`/lists/${list_id}/new-item`}>New Item</Link>
       <ListItemTable list_items={list_items} onDeleteRowClick={itemRowDelete} />
     </div>
   );

@@ -22,3 +22,7 @@ export type ListItem = {
   id: number;
   title: string;
 }
+
+export type ListItemCreate = {
+  title: string;
+}

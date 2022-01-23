@@ -42,3 +42,11 @@ export async function getListItemById(login_details: LoginDetails, list_id: numb
   const json: ListItem = await response.json();
   return json;
 }
+
+export async function deleteListItemById(login_details: LoginDetails, list_id: number, item_id: number) {
+  const url = new URL(`/lists/${list_id}/items/${item_id}`, login_details.api_url);
+  await fetch(url.toString(), {
+    method: "DELETE",
+    headers: createHeaders(login_details.api_key),
+  });
+}

@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from "react";
+import { useCallback, useContext, useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { LoginContext } from "../contexts/LoginProvider";
 import { ItemList } from "../core/types";
@@ -11,13 +11,11 @@ function ListManager() {
   const { login } = useContext(LoginContext);
   const [item_lists, setItemLists] = useState<ItemList[]>([]);
 
-  const update_lists = async () => {
+  const update_lists = useCallback(async () => {
     // TODO: add more error handling
     if (login !== null) { setItemLists(await getLists(login)); }
-    else {
-      { navigate("/login"); }
-    }
-  };
+    else { navigate("/login") }
+  }, [login, setItemLists, navigate]);
   const handleListRowClick = (list_id: number) => navigate(`/lists/${list_id}`);
   const handleListRowDeleteClick = async (list_id: number) => {
     let found_index = item_lists.findIndex(row => row.id === list_id);
@@ -28,7 +26,7 @@ function ListManager() {
     }
   };
 
-  useEffect(() => { update_lists() }, []);
+  useEffect(() => { update_lists() }, [update_lists]);
 
   return (
     <div>

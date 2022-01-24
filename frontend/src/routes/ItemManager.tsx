@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from "react";
+import { useCallback, useContext, useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import ListItemTable from "../components/ListItemTable";
 import { LoginContext } from "../contexts/LoginProvider";
@@ -13,18 +13,16 @@ function ItemManager() {
   const [list, setList] = useState<ItemList>();
   const [list_items, setListItems] = useState<ListItem[]>([]);
 
-  const update_content = async () => {
+  const update_content = useCallback(async () => {
     // TODO: add more error handling
     if (login !== null) {
       setList(await getListById(login, Number(list_id)));
       setListItems(await getListItemsByList(login, Number(list_id)));
     }
-    else {
-      { navigate("/login"); }
-    }
-  };
+    else { navigate("/login") }
+  }, [navigate, list_id, login, setList, setListItems]);
 
-  useEffect(() => { update_content() }, []);
+  useEffect(() => { update_content() }, [update_content]);
 
   const itemRowDelete = async (item_id: number) => {
     let found_index = list_items.findIndex(row => row.id === item_id);

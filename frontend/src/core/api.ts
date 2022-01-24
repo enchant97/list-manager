@@ -1,4 +1,5 @@
 import { ItemList, ItemListCreate, ListItem, ListItemCreate, LoginDetails } from "./types";
+import {combineUrl} from "./helpers";
 
 function createHeaders(api_token: string) {
   return {
@@ -8,7 +9,7 @@ function createHeaders(api_token: string) {
 }
 
 export async function getLists(login_details: LoginDetails): Promise<ItemList[]> {
-  const url = new URL("/lists", login_details.api_url);
+  const url = combineUrl("/lists", login_details.api_url);
   const response = await fetch(url.toString(), {
     headers: createHeaders(login_details.api_key),
   });
@@ -17,7 +18,7 @@ export async function getLists(login_details: LoginDetails): Promise<ItemList[]>
 }
 
 export async function newList(login_details: LoginDetails, new_list: ItemListCreate): Promise<ItemList> {
-  const url = new URL("/lists", login_details.api_url);
+  const url = combineUrl("/lists", login_details.api_url);
   const response = await fetch(url.toString(), {
     method: "POST",
     headers: createHeaders(login_details.api_key),
@@ -28,7 +29,7 @@ export async function newList(login_details: LoginDetails, new_list: ItemListCre
 }
 
 export async function getListById(login_details: LoginDetails, list_id: number): Promise<ItemList> {
-  const url = new URL(`/lists/${list_id}`, login_details.api_url);
+  const url = combineUrl(`/lists/${list_id}`, login_details.api_url);
   const response = await fetch(url.toString(), {
     headers: createHeaders(login_details.api_key),
   });
@@ -37,7 +38,7 @@ export async function getListById(login_details: LoginDetails, list_id: number):
 }
 
 export async function deleteListById(login_details: LoginDetails, list_id: number) {
-  const url = new URL(`/lists/${list_id}`, login_details.api_url);
+  const url = combineUrl(`/lists/${list_id}`, login_details.api_url);
   await fetch(url.toString(), {
     method: "DELETE",
     headers: createHeaders(login_details.api_key),
@@ -45,7 +46,7 @@ export async function deleteListById(login_details: LoginDetails, list_id: numbe
 }
 
 export async function getListItemsByList(login_details: LoginDetails, list_id: number): Promise<ListItem[]> {
-  const url = new URL(`/lists/${list_id}/items`, login_details.api_url);
+  const url = combineUrl(`/lists/${list_id}/items`, login_details.api_url);
   const response = await fetch(url.toString(), {
     headers: createHeaders(login_details.api_key),
   });
@@ -54,7 +55,7 @@ export async function getListItemsByList(login_details: LoginDetails, list_id: n
 }
 
 export async function newListItem(login_details: LoginDetails, list_id: number, new_item: ListItemCreate) {
-  const url = new URL(`/lists/${list_id}/items`, login_details.api_url);
+  const url = combineUrl(`/lists/${list_id}/items`, login_details.api_url);
   const response = await fetch(url.toString(), {
     method: "POST",
     headers: createHeaders(login_details.api_key),
@@ -65,7 +66,7 @@ export async function newListItem(login_details: LoginDetails, list_id: number, 
 }
 
 export async function getListItemById(login_details: LoginDetails, list_id: number, item_id: number): Promise<ListItem> {
-  const url = new URL(`/lists/${list_id}/items/${item_id}`, login_details.api_url);
+  const url = combineUrl(`/lists/${list_id}/items/${item_id}`, login_details.api_url);
   const response = await fetch(url.toString(), {
     headers: createHeaders(login_details.api_key),
   });
@@ -74,7 +75,7 @@ export async function getListItemById(login_details: LoginDetails, list_id: numb
 }
 
 export async function deleteListItemById(login_details: LoginDetails, list_id: number, item_id: number) {
-  const url = new URL(`/lists/${list_id}/items/${item_id}`, login_details.api_url);
+  const url = combineUrl(`/lists/${list_id}/items/${item_id}`, login_details.api_url);
   await fetch(url.toString(), {
     method: "DELETE",
     headers: createHeaders(login_details.api_key),

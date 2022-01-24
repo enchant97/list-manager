@@ -6,6 +6,7 @@ from pydantic import BaseSettings
 
 class Settings(BaseSettings):
     ROOT_URL: Optional[str] = None
+    CORS_ALLOW_ORIGIN: Optional[str] = None
     API_KEY: str
     DB_URI: str
 

@@ -1,0 +1,20 @@
+version: '3'
+
+services:
+  backend:
+    build:
+      context: ./backend
+    environment:
+      # replace this with your own api key (password)
+      - "API_KEY=mysecretkey"
+      # replace this with a database to connect to
+      - "DB_URI=sqlite://:memory:"
+      - "ROOT_URL=/api"
+
+  frontend:
+    build:
+      context: ./frontend
+    ports:
+      - 80:8000
+    volumes:
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf:ro

@@ -34,12 +34,15 @@ function ItemManager() {
   };
 
   return (
-    <div>
+    <div className={styles.container}>
       <h1>Items</h1>
       <h2>{list?.title}</h2>
       <p>{list?.description}</p>
       <Link className={styles.button} to={`/lists/${list_id}/new-item`}>New Item</Link>
-      <ListItemTable list_items={list_items} onDeleteRowClick={itemRowDelete} />
+      {list_items.length === 0
+        ? <p>No items found yet...</p>
+        : <ListItemTable list_items={list_items} onDeleteRowClick={itemRowDelete} />
+      }
     </div>
   );
 }

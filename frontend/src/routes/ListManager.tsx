@@ -29,10 +29,16 @@ function ListManager() {
   useEffect(() => { update_lists() }, [update_lists]);
 
   return (
-    <div>
+    <div className={styles.container}>
       <h1>Lists</h1>
       <Link className={styles.button} to={"/lists/new"}>New List</Link>
-      <ListTable item_lists={item_lists} onListRowClick={handleListRowClick} onListRowDeleteClick={handleListRowDeleteClick} />
+      {item_lists.length === 0
+        ? <p>No lists found yet...</p>
+        : <ListTable
+          item_lists={item_lists} onListRowClick={handleListRowClick}
+          onListRowDeleteClick={handleListRowDeleteClick}
+        />
+      }
     </div>
   );
 }

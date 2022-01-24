@@ -11,7 +11,7 @@ function Header() {
       <h1>List Manager</h1>
       <nav className={styles['nav']}>
         <Link className={coreStyles.button} to="/">Home</Link>
-        {isLoggedIn() !== false
+        {isLoggedIn() === true
           ? <> <Link className={coreStyles.button} to="/lists">Lists</Link>
             <Link className={coreStyles.button} to="/logout">Logout</Link>
           </>

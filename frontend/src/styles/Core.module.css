@@ -18,6 +18,10 @@ h1, h2, h3, h4, h5, h6 {
   font-family: var(--ff-heading);
 }
 
+.container > * {
+  margin-bottom: 10px;
+}
+
 .twoCol {
   display: grid;
   gap: 4px;
@@ -29,6 +33,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 button, .button {
+  display: inline-block;
   text-decoration: none;
   padding: 6px;
   cursor: pointer;
@@ -48,4 +53,9 @@ input {
   padding: 6px;
   border: 1px solid grey;
   border-radius: var(--border-radius);
+}
+
+input:hover {
+  transition-duration: 500ms;
+  background-color: #e6e6e6;
 }

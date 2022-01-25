@@ -2,7 +2,7 @@
 fastapi
 uvicorn
 # database
-tortoise-orm
+tortoise-orm[aiosqlite,aiomysql]
 # models
 pydantic[dotenv]
 # json accelerator (optional)

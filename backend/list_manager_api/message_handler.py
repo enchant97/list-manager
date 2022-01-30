@@ -29,9 +29,11 @@ class MessageHandler:
         """
         Removes any unused rooms
         """
-        for key in self.__clients_by_room:
-            if len(self.__clients_by_room[key]) == 0:
-                del self.__clients_by_room[key]
+
+        to_remove = [key for key in self.__clients_by_room if len(
+            self.__clients_by_room[key]) == 0]
+        for key in to_remove:
+            del self.__clients_by_room[key]
 
     async def new_message_by_client(self, *, message, client_ids: Union[str, Iterable[str]]):
         """

@@ -12,7 +12,7 @@ except ImportError:
     import json
 
 from .config import get_settings
-from .message_handler import LiveUpdateMessageHandler
+from .message_handler import LiveUpdateMessageHandler, LiveUpdateMessageType, UpdateMessage
 
 api_key_header = APIKeyHeader(name="X-API-Key", auto_error=False)
 api_key_cookie = APIKeyCookie(name="API_KEY", auto_error=False)
@@ -53,6 +53,34 @@ async def sse_message_publisher(*, request: Request, list_id: Optional[int]):
             yield await client_queue.get()
     finally:
         message_handler.remove_client(client_id)
+
+
+class MessageCreator:
+    """
+    Used to easily create update messages
+    ready to send to the client in JSON format
+    """
+    @staticmethod
+    def base(update_type: LiveUpdateMessageType, list_id: int, item_id: Optional[int]) -> str:
+        message = UpdateMessage(update_type=update_type, list_id=list_id, item_id=item_id)
+        message = message.asdict()
+        return json.dumps(message)
+
+    @staticmethod
+    def other(list_id: int, item_id: Optional[int]) -> str:
+        return MessageCreator.base(LiveUpdateMessageType.OTHER, list_id, item_id)
+
+    @staticmethod
+    def create(list_id: int, item_id: Optional[int]) -> str:
+        return MessageCreator.base(LiveUpdateMessageType.CREATE, list_id, item_id)
+
+    @staticmethod
+    def update(list_id: int, item_id: Optional[int]) -> str:
+        return MessageCreator.base(LiveUpdateMessageType.UPDATE, list_id, item_id)
+
+    @staticmethod
+    def delete(list_id: int, item_id: Optional[int]) -> str:
+        return MessageCreator.base(LiveUpdateMessageType.REMOVE, list_id, item_id)
 
 
 class JSONResponseAccelerated(JSONResponse):

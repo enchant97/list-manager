@@ -6,8 +6,21 @@ from .config import get_settings
 from .database import models
 from .helpers import JSONResponseAccelerated
 from .routes import router
+from .live_update import router as live_update_router
+
+tags_metadata = (
+    {
+        "name": "api",
+        "description": ""
+    },
+    {
+        "name": "updates",
+        "description": ""
+    },
+)
 
 app = FastAPI(
+    openapi_tags=tags_metadata,
     root_path=get_settings().ROOT_URL,
     default_response_class=JSONResponseAccelerated,
     docs_url="/",
@@ -23,7 +36,8 @@ if get_settings().CORS_ALLOW_ORIGIN is not None:
         allow_headers=["*"],
     )
 
-app.include_router(router)
+app.include_router(router, tags=["api"])
+app.include_router(live_update_router, prefix="/updates", tags=["updates"])
 
 
 @app.on_event("startup")

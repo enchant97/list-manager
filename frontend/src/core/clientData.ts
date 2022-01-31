@@ -1,4 +1,5 @@
 import { LoginDetails } from "./types";
+import { combineUrl } from "./helpers";
 
 const API_URL_KEY = 'api_url';
 const API_KEY_KEY = 'api_key';
@@ -29,4 +30,18 @@ export function removeLoginDetails() {
  */
 export function getApiUrl(): string {
   return window.localStorage.getItem(API_URL_KEY) || process.env.REACT_APP_API_URL || (new URL("/api", window.location.origin)).toString();
+}
+
+function getUpdateUrl(base_url: string, list_id: number | null): string {
+  switch (list_id) {
+    case null:
+      return combineUrl("/updates/lists", base_url);
+    default:
+      return combineUrl(`/updates/lists/${list_id}`, base_url);
+  }
+}
+
+export function getSSEUrl(login_details: LoginDetails, list_id: number | null): string {
+  var url = getUpdateUrl(login_details.api_url, list_id);
+  return url + `?api-key=${login_details.api_key}`;
 }

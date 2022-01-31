@@ -26,3 +26,16 @@ export type ListItem = {
 export type ListItemCreate = {
   title: string;
 }
+
+export enum UpdateMessageType {
+  OTHER = 0,
+  CREATE = 1,
+  UPDATE = 2,
+  REMOVE = 3,
+}
+
+export type UpdateMessage = {
+  update_type: UpdateMessageType;
+  list_id: number;
+  item_id: number | null;
+}

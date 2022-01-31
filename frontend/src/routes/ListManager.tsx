@@ -5,6 +5,9 @@ import { ItemList } from "../core/types";
 import { deleteListById, getLists } from "../core/api";
 import ListTable from "../components/ListTable";
 import styles from "../styles/Core.module.css";
+import { getSSEUrl } from "../core/clientData";
+import { liveUpdatesConnect } from "../core/helpers";
+import { UpdateMessage } from "../core/types";
 
 function ListManager() {
   const navigate = useNavigate();
@@ -26,7 +29,20 @@ function ListManager() {
     }
   };
 
-  useEffect(() => { update_lists() }, [update_lists]);
+  useEffect(() => {
+    if (login === null) {
+      navigate("/login");
+      return;
+    }
+    update_lists();
+    let sse_url = getSSEUrl(login, null);
+    let sse_close = liveUpdatesConnect(sse_url, (message: UpdateMessage) => {
+      // don't need to update this page when there is a item change
+      if (message.item_id === null) return;
+      update_lists();
+    });
+    return sse_close;
+  }, [login, navigate, update_lists]);
 
   return (
     <div className={styles.container}>

@@ -2,10 +2,16 @@ from typing import Union
 
 from fastapi import APIRouter, Depends
 
+from . import __version__
 from .database import crud, schema
 from .helpers import MessageCreator, message_handler, verify_api_key
 
 router = APIRouter(dependencies=(Depends(verify_api_key),))
+
+
+@router.get("/version")
+async def get_version():
+    return __version__
 
 
 @router.get("/lists", response_model=list[schema.ItemList])

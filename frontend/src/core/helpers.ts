@@ -1,3 +1,4 @@
+import { ValidationError, NotFoundError, BadAuthorisationError } from "./exceptions";
 import { UpdateMessage } from "./types";
 
 export function combineUrl(path_part: string, base_url: string): string {
@@ -17,4 +18,24 @@ export function liveUpdatesConnect(url: string, onMessage: Function, onError: Fu
     sse.close();
   });
   return () => { sse.close() };
+}
+
+export function throwRequestErrors(response: Response) {
+  if (response.ok) { return }
+  switch (response.status) {
+    case 401:
+      throw new BadAuthorisationError(response.statusText);
+    case 403:
+      throw new BadAuthorisationError(response.statusText);
+    case 404:
+      throw new NotFoundError(response.statusText);
+    case 422:
+      throw new ValidationError(response.statusText);
+  }
+}
+
+export function isCompatibleWithApi(apiVersion: string): boolean {
+  // TODO: implement better version checking
+  if (apiVersion === "0.1.0") { return true; }
+  return false;
 }

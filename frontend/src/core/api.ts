@@ -1,11 +1,20 @@
 import { ItemList, ItemListCreate, ListItem, ListItemCreate, LoginDetails } from "./types";
-import {combineUrl} from "./helpers";
+import { combineUrl, throwRequestErrors } from "./helpers";
 
 function createHeaders(api_token: string) {
   return {
     'Content-Type': 'application/json',
     'X-API-Key': api_token,
   };
+}
+
+export async function getVersion(login_details: LoginDetails): Promise<string> {
+  const url = combineUrl("/version", login_details.api_url);
+  const response = await fetch(url.toString(), {
+    headers: createHeaders(login_details.api_key),
+  });
+  throwRequestErrors(response);
+  return await response.json();
 }
 
 export async function getLists(login_details: LoginDetails): Promise<ItemList[]> {

@@ -1,8 +1,12 @@
-import React, { useContext, useState } from "react";
+import React, { useCallback, useContext, useState } from "react";
 import { getApiUrl } from "../core/clientData";
 import { LoginContext } from "../contexts/LoginProvider";
 import { useNavigate } from "react-router-dom";
 import styles from "../styles/Core.module.css";
+import { getVersion } from "../core/api";
+import { LoginDetails } from "../core/types";
+import { BadAuthorisationError, NotFoundError } from "../core/exceptions";
+import { isCompatibleWithApi } from "../core/helpers";
 
 function Login() {
   const { login, setLogin } = useContext(LoginContext);
@@ -19,11 +23,25 @@ function Login() {
   }
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    // TODO: validate that login is allowed
-    setLogin({ api_key, api_url });
+    let new_login = { api_key, api_url };
+    validateDetails(new_login);
     event.preventDefault();
-    navigate('/');
   }
+
+  const validateDetails = useCallback(async (new_login: LoginDetails) => {
+    try {
+      let api_version = await getVersion(new_login);
+      if (isCompatibleWithApi(api_version)) {
+        setLogin(new_login);
+        navigate('/');
+      }
+      else { alert("Current frontend version not compatible with selected api server!") }
+    } catch (err) {
+      if (err instanceof NotFoundError) { alert("API responded with 404, is the API url valid?") }
+      else if (err instanceof BadAuthorisationError) { alert("Authorisation could not be validated") }
+      else { throw err; }
+    }
+  }, [setLogin, navigate]);
 
   return (
     <form className={[styles.container, styles.twoCol].join(" ")} onSubmit={handleSubmit}>

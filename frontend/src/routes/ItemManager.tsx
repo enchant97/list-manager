@@ -1,6 +1,7 @@
 import { useCallback, useContext, useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import ListItemTable from "../components/ListItemTable";
+import Loading from "../components/Loading";
 import { LoginContext } from "../contexts/LoginProvider";
 import { deleteListItemById, getListById, getListItemsByList } from "../core/api";
 import { getSSEUrl } from "../core/clientData";
@@ -14,15 +15,28 @@ function ItemManager() {
   const { login } = useContext(LoginContext);
   const [list, setList] = useState<ItemList>();
   const [list_items, setListItems] = useState<ListItem[]>([]);
+  const [loading, setLoading] = useState(false);
+  const [itemsLoading, setItemsLoading] = useState(false);
 
   const update_content = useCallback(async () => {
     // TODO: add more error handling
-    if (login !== null) {
-      setList(await getListById(login, Number(list_id)));
-      setListItems(await getListItemsByList(login, Number(list_id)));
+    if (login === null) {
+      navigate("/login");
+      return;
     }
-    else { navigate("/login") }
-  }, [navigate, list_id, login, setList, setListItems]);
+    await Promise.allSettled([
+      (async () => {
+        setLoading(true);
+        setList(await getListById(login, Number(list_id)));
+        setLoading(false);
+      })(),
+      (async () => {
+        setItemsLoading(true);
+        setListItems(await getListItemsByList(login, Number(list_id)));
+        setItemsLoading(false);
+      })()
+    ]);
+  }, [navigate, list_id, login, setList, setListItems, setLoading, setItemsLoading]);
   const update_list = useCallback(async () => {
     if (login === null) { navigate("/login"); return; }
     let updated_list = await getListById(login, Number(list_id));
@@ -69,12 +83,22 @@ function ItemManager() {
   return (
     <div className={styles.container}>
       <h1>Items</h1>
-      <h2>{list?.title}</h2>
-      <p>{list?.description}</p>
+      {loading
+        // Replace this with a loading text box component
+        ? <><h2>...</h2><p>...</p></>
+        : <>
+          <h2>{list?.title}</h2>
+          <p>{list?.description}</p>
+        </>
+      }
       <Link className={styles.button} to={`/lists/${list_id}/new-item`}>New Item</Link>
-      {list_items.length === 0
-        ? <p>No items found yet...</p>
-        : <ListItemTable list_items={list_items} onDeleteRowClick={itemRowDelete} />
+      {itemsLoading
+        ? <Loading />
+        : <>
+          {list_items.length === 0
+            ? <p>No items found yet...</p>
+            : <ListItemTable list_items={list_items} onDeleteRowClick={itemRowDelete} />
+          }</>
       }
     </div>
   );

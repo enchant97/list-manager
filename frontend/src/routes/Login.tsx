@@ -7,12 +7,14 @@ import { getVersion } from "../core/api";
 import { LoginDetails } from "../core/types";
 import { BadAuthorisationError, NotFoundError } from "../core/exceptions";
 import { isCompatibleWithApi } from "../core/helpers";
+import Loading from "../components/Loading";
 
 function Login() {
   const { login, setLogin } = useContext(LoginContext);
   const navigate = useNavigate();
   const [api_url, setApiUrl] = useState(login?.api_url || getApiUrl());
   const [api_key, setApiKey] = useState(login?.api_key || '');
+  const [loading, setLoading] = useState(false);
 
   const handleApiUrlChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setApiUrl(event.target.value);
@@ -29,6 +31,7 @@ function Login() {
   }
 
   const validateDetails = useCallback(async (new_login: LoginDetails) => {
+    setLoading(true);
     try {
       let api_version = await getVersion(new_login);
       if (isCompatibleWithApi(api_version)) {
@@ -40,8 +43,12 @@ function Login() {
       if (err instanceof NotFoundError) { alert("API responded with 404, is the API url valid?") }
       else if (err instanceof BadAuthorisationError) { alert("Authorisation could not be validated") }
       else { throw err; }
+    } finally {
+      setLoading(false);
     }
-  }, [setLogin, navigate]);
+  }, [setLogin, navigate, setLoading]);
+
+  if (loading) return <Loading />;
 
   return (
     <form className={[styles.container, styles.twoCol].join(" ")} onSubmit={handleSubmit}>

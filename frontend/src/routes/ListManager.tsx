@@ -8,17 +8,24 @@ import styles from "../styles/Core.module.css";
 import { getSSEUrl } from "../core/clientData";
 import { liveUpdatesConnect } from "../core/helpers";
 import { UpdateMessage } from "../core/types";
+import Loading from "../components/Loading";
 
 function ListManager() {
   const navigate = useNavigate();
   const { login } = useContext(LoginContext);
   const [item_lists, setItemLists] = useState<ItemList[]>([]);
+  const [loading, setLoading] = useState(false);
 
   const update_lists = useCallback(async () => {
     // TODO: add more error handling
-    if (login !== null) { setItemLists(await getLists(login)); }
-    else { navigate("/login") }
-  }, [login, setItemLists, navigate]);
+    if (login === null) {
+      navigate("/login");
+      return;
+    }
+    setLoading(true);
+    setItemLists(await getLists(login));
+    setLoading(false);
+  }, [login, setItemLists, navigate, setLoading]);
   const handleListRowClick = (list_id: number) => navigate(`/lists/${list_id}`);
   const handleListRowDeleteClick = async (list_id: number) => {
     let found_index = item_lists.findIndex(row => row.id === list_id);
@@ -38,7 +45,7 @@ function ListManager() {
     let sse_url = getSSEUrl(login, null);
     let sse_close = liveUpdatesConnect(sse_url, (message: UpdateMessage) => {
       // don't need to update this page when there is a item change
-      if (message.item_id === null) return;
+      if (message.item_id !== null) return;
       update_lists();
     });
     return sse_close;
@@ -48,13 +55,18 @@ function ListManager() {
     <div className={styles.container}>
       <h1>Lists</h1>
       <Link className={styles.button} to={"/lists/new"}>New List</Link>
-      {item_lists.length === 0
-        ? <p>No lists found yet...</p>
-        : <ListTable
-          item_lists={item_lists} onListRowClick={handleListRowClick}
-          onListRowDeleteClick={handleListRowDeleteClick}
-        />
+      {loading
+        ? <Loading />
+        : <>
+          {item_lists.length === 0
+            ? <p>No lists found yet...</p>
+            : <ListTable
+              item_lists={item_lists} onListRowClick={handleListRowClick}
+              onListRowDeleteClick={handleListRowDeleteClick}
+            />
+          }</>
       }
+
     </div>
   );
 }

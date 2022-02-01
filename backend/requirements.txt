@@ -1,6 +1,7 @@
 # web framework
 fastapi
 uvicorn
+sse-starlette==0.10.3
 # database
 tortoise-orm[aiosqlite,aiomysql]
 # models

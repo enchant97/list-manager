@@ -2,6 +2,9 @@ import { useContext, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { LoginContext } from "../contexts/LoginProvider";
 import { newListItem } from "../core/api";
+import { getSSEUrl } from "../core/clientData";
+import { liveUpdatesConnect } from "../core/helpers";
+import { UpdateMessage, UpdateMessageType } from "../core/types";
 import styles from "../styles/Core.module.css";
 
 export type NewItemState = {
@@ -25,7 +28,21 @@ function NewItem() {
     }
   };
 
-  useEffect(() => { if (login === null) { navigate("/login"); } });
+  useEffect(() => {
+    if (login === null) {
+      navigate("/login");
+      return;
+    }
+
+    let sse_url = getSSEUrl(login, null);
+    let sse_close = liveUpdatesConnect(sse_url, (message: UpdateMessage) => {
+      if (message.item_id === null && message.list_id === Number(list_id) && message.update_type === UpdateMessageType.REMOVE) {
+        // the list we are adding an item to no longer exists
+        navigate("/lists");
+      }
+    });
+    return sse_close;
+  }, [login, navigate, list_id]);
 
   return (
     <form className={styles.twoCol} onSubmit={handleSubmit}>

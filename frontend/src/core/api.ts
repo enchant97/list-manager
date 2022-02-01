@@ -22,6 +22,7 @@ export async function getLists(login_details: LoginDetails): Promise<ItemList[]>
   const response = await fetch(url.toString(), {
     headers: createHeaders(login_details.api_key),
   });
+  throwRequestErrors(response);
   const json: ItemList[] = await response.json();
   return json;
 }
@@ -33,6 +34,7 @@ export async function newList(login_details: LoginDetails, new_list: ItemListCre
     headers: createHeaders(login_details.api_key),
     body: JSON.stringify(new_list),
   });
+  throwRequestErrors(response);
   const json: ItemList = await response.json();
   return json;
 }
@@ -43,15 +45,17 @@ export async function getListById(login_details: LoginDetails, list_id: number):
     headers: createHeaders(login_details.api_key),
   });
   const json: ItemList = await response.json();
+  throwRequestErrors(response);
   return json;
 }
 
 export async function deleteListById(login_details: LoginDetails, list_id: number) {
   const url = combineUrl(`/lists/${list_id}`, login_details.api_url);
-  await fetch(url.toString(), {
+  const response = await fetch(url.toString(), {
     method: "DELETE",
     headers: createHeaders(login_details.api_key),
   });
+  throwRequestErrors(response);
 }
 
 export async function getListItemsByList(login_details: LoginDetails, list_id: number): Promise<ListItem[]> {
@@ -59,6 +63,7 @@ export async function getListItemsByList(login_details: LoginDetails, list_id: n
   const response = await fetch(url.toString(), {
     headers: createHeaders(login_details.api_key),
   });
+  throwRequestErrors(response);
   const json: ListItem[] = await response.json();
   return json;
 }
@@ -70,6 +75,7 @@ export async function newListItem(login_details: LoginDetails, list_id: number, 
     headers: createHeaders(login_details.api_key),
     body: JSON.stringify(new_item),
   });
+  throwRequestErrors(response);
   const json: ListItem = await response.json();
   return json;
 }
@@ -79,14 +85,16 @@ export async function getListItemById(login_details: LoginDetails, list_id: numb
   const response = await fetch(url.toString(), {
     headers: createHeaders(login_details.api_key),
   });
+  throwRequestErrors(response);
   const json: ListItem = await response.json();
   return json;
 }
 
 export async function deleteListItemById(login_details: LoginDetails, list_id: number, item_id: number) {
   const url = combineUrl(`/lists/${list_id}/items/${item_id}`, login_details.api_url);
-  await fetch(url.toString(), {
+  const response = await fetch(url.toString(), {
     method: "DELETE",
     headers: createHeaders(login_details.api_key),
   });
+  throwRequestErrors(response);
 }

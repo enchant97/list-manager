@@ -1,6 +1,6 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
 import reportWebVitals from './reportWebVitals';
+import { createRoot } from 'react-dom/client';
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import LoginProvider from "./contexts/LoginProvider";
 import App from './App';
@@ -14,7 +14,9 @@ import NewList from './routes/NewList';
 import NewItem from './routes/NewItem';
 import NotFound from './routes/NotFound';
 
-ReactDOM.render(
+const container = document.getElementById('root');
+const root = createRoot(container!);
+root.render(
   <React.StrictMode>
     <BrowserRouter>
       <LoginProvider>
@@ -32,8 +34,7 @@ ReactDOM.render(
         <Footer />
       </LoginProvider>
     </BrowserRouter>
-  </React.StrictMode>,
-  document.getElementById('root')
+  </React.StrictMode>
 );
 
 reportWebVitals();

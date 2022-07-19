@@ -1,0 +1,70 @@
+:root {
+    --border-radius: 10px;
+    --ff-main: 'Open Sans', sans-serif;
+    --ff-heading: 'Roboto', sans-serif;
+}
+
+body {
+    background-color: #f5f5f5;
+    font-family: var(--ff-main);
+}
+
+a,
+button,
+input {
+    font-family: var(--ff-main);
+    font-size: 1em;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    font-family: var(--ff-heading);
+}
+
+.container>* {
+    margin-bottom: 10px;
+}
+
+.twoCol {
+    display: grid;
+    gap: 4px;
+    grid-template-columns: max-content auto;
+}
+
+.twoCol .fillBoth {
+    grid-column: 1 / span 2;
+}
+
+button,
+.button {
+    display: inline-block;
+    text-decoration: none;
+    padding: 6px;
+    cursor: pointer;
+    border: 1px solid grey;
+    border-radius: var(--border-radius);
+    background-color: lightgray;
+    color: black;
+}
+
+button:hover,
+.button:hover {
+    transition-duration: 500ms;
+    background-color: darkgrey;
+    color: white;
+}
+
+input {
+    padding: 6px;
+    border: 1px solid grey;
+    border-radius: var(--border-radius);
+}
+
+input:hover {
+    transition-duration: 500ms;
+    background-color: #e6e6e6;
+}

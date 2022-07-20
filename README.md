@@ -12,11 +12,11 @@ Manage lists, using a REST api and a web front-end.
 The backend is written in Python 3 using the FastApi library.
 
 ### Frontend
-The frontend is written in typescript using React.
+The frontend is written in typescript using SolidJS.
 
 ## Configuration
 ### Frontend
-When the project is built it might need `REACT_APP_API_URL` to be set as a environment variable which allows for a the absolute url of where the api will be accessible to be set for example: `https://api.example.com`. If unset it will take either a users custom url or use `location.origin/api`.
+When build frontend assumes api will be at `/api`
 
 ### Backend
 All configs are handled through environment variables.

@@ -5,6 +5,7 @@ FROM node:18-alpine3.16 as builder
     COPY package.json .
     COPY tsconfig.json .
     COPY vite.config.ts .
+    COPY index.html .
 
     RUN npm install
 

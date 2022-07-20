@@ -1,12 +1,13 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from tortoise.contrib.fastapi import register_tortoise
+from web_health_checker.contrib.fastapi import router as health_check_router
 
 from .config import get_settings
 from .database import models
 from .helpers import JSONResponseAccelerated
-from .routes import router
 from .live_update import router as live_update_router
+from .routes import router
 
 tags_metadata = (
     {
@@ -38,6 +39,7 @@ if get_settings().CORS_ALLOW_ORIGIN is not None:
 
 app.include_router(router, tags=["api"])
 app.include_router(live_update_router, prefix="/updates", tags=["updates"])
+app.include_router(health_check_router)
 
 
 @app.on_event("startup")

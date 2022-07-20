@@ -14,7 +14,7 @@ const Login: Component = () => {
   const navigate = useNavigate();
   const [api_url, setApiUrl] = createSignal(getLogin()?.api_url || getApiUrl());
   const [api_key, setApiKey] = createSignal(getLogin()?.api_key || '');
-  const [loading, setLoading] = createSignal(false);
+  const [getLoading, setLoading] = createSignal(false);
   const [loginEntry, setLoginEntry] = createSignal<LoginDetails | null>(null);
 
   const validateDetails = async (new_login: LoginDetails) => {
@@ -62,17 +62,23 @@ const Login: Component = () => {
     setLoginEntry(new_login);
   }
 
-  if (loading()) return <Loading />;
+  if (getLoading()) return <Loading />;
 
+  // TODO Move login form to component
   return (
-    <form class={[styles.container, styles.twoCol].join(" ")} onSubmit={handleSubmit}>
-      <h1 class={styles.fillBoth}>Login</h1>
-      <label for="api_url">Api Url:</label>
-      <input type="text" id="api_url" name="api_url" autocomplete="username" value={api_url()} onInput={handleApiUrlChange} required />
-      <label for="api_key">Api Key:</label>
-      <input type="password" id="api_key" name="api_key" autocomplete="current-password" value={api_key()} onInput={handleApiKeyChange} required />
-      <button class={styles.fillBoth} type="submit">Login</button>
-    </form>
+    <>
+      {getLoading() === true
+        ? <Loading />
+        : <form class={[styles.container, styles.twoCol].join(" ")} onSubmit={handleSubmit}>
+          <h1 class={styles.fillBoth}>Login</h1>
+          <label for="api_url">Api Url:</label>
+          <input type="text" id="api_url" name="api_url" autocomplete="username" value={api_url()} onInput={handleApiUrlChange} required />
+          <label for="api_key">Api Key:</label>
+          <input type="password" id="api_key" name="api_key" autocomplete="current-password" value={api_key()} onInput={handleApiKeyChange} required />
+          <button class={styles.fillBoth} type="submit">Login</button>
+        </form>
+      }
+    </>
   );
 };
 

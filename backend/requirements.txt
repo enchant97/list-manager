@@ -1,10 +1,5 @@
-# web framework
-fastapi
-uvicorn
-sse-starlette==0.10.3
-# database
-tortoise-orm[aiosqlite,aiomysql]
-# models
-pydantic[dotenv]
-# json accelerator (optional)
-python-rapidjson
+fastapi~=0.79.0
+uvicorn~=0.18.2
+sse-starlette~=0.10.3
+tortoise-orm[aiomysql]~=0.19.2
+pydantic[dotenv]~=1.9.1

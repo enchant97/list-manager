@@ -1,4 +1,4 @@
-import { Component, createSignal, createResource, useContext, createEffect } from "solid-js";
+import { Component, createSignal, useContext, createEffect } from "solid-js";
 import { getApiUrl } from "../core/clientData";
 import { LoginContext } from "../contexts/LoginProvider";
 import { useNavigate } from "solid-app-router";
@@ -42,7 +42,7 @@ const Login: Component = () => {
       if (message === null) {
         setLogin(loginEntry());
         navigate('/');
-        return
+        return;
       }
       alert(message);
     }
@@ -60,20 +60,6 @@ const Login: Component = () => {
     event.preventDefault();
     let new_login = { api_key: api_key(), api_url: api_url() };
     setLoginEntry(new_login);
-
-    // setLoading(true);
-    // let [message] = createResource(new_login, validateDetails);
-
-    // let recv_message = message();
-    // console.log("MESSAGE: ", recv_message);
-    // setLoading(false);
-
-    // if (recv_message === null) {
-    //   setLogin(new_login);
-    //   navigate('/');
-    //   return
-    // }
-    // alert(recv_message);
   }
 
   if (loading()) return <Loading />;

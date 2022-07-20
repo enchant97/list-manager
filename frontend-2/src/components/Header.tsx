@@ -11,7 +11,7 @@ const Header: Component = () => {
       <h1>List Manager</h1>
       <nav class={styles.nav}>
         <Link href="/">Home</Link>
-        {isLoggedIn === true
+        {isLoggedIn() === true
           ? <> <Link href="/lists">Lists</Link>
             <Link href="/logout">Logout</Link>
           </>

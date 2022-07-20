@@ -78,7 +78,7 @@ const Items: Component = () => {
           <p>{list()?.description}</p>
         </>
       }
-      <Link class={shared_styles.button} href={`/lists/${list_id}/new-item`}>New Item</Link>
+      <Link class={shared_styles.button} href={`/lists/${list_id}/new`}>New Item</Link>
       {listItemsData.loading
         ? <Loading />
         : <>

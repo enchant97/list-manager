@@ -7,7 +7,7 @@ import { liveUpdatesConnect } from "../core/helpers";
 import { UpdateMessage, UpdateMessageType } from "../core/types";
 import shared_styles from "../Shared.module.css";
 
-type NewItemState = {
+type NewItemSignal = {
   title: string;
 }
 
@@ -15,11 +15,13 @@ const NewItem: Component = () => {
   const navigate = useNavigate();
   const { list_id } = useParams();
   const { isLoggedIn, getLogin } = useContext(LoginContext);
-  const [getNewItem, setNewItem] = createSignal<NewItemState>({ title: "" });
+  const [getNewItem, setNewItem] = createSignal<NewItemSignal>({ title: "" });
 
   createEffect(() => { if (!isLoggedIn()) { navigate("/login"); } })
 
   createEffect(() => {
+    if (!isLoggedIn()) { return; }
+
     let sse_url = getSSEUrl(getLogin(), null);
     let sse_close = liveUpdatesConnect(sse_url, (message: UpdateMessage) => {
       if (message.item_id === null && message.list_id === Number(list_id) && message.update_type === UpdateMessageType.REMOVE) {

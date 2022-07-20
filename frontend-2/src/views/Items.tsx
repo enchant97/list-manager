@@ -21,11 +21,7 @@ const Items: Component = () => {
     return await getListItemsByList(params.getLogin(), Number(params.list_id));
   });
 
-  createEffect(() => {
-    if (isLoggedIn() === false) {
-      navigate("/login");
-    }
-  });
+  createEffect(() => { if (!isLoggedIn()) { navigate("/login"); } });
 
   createEffect(() => {
     let new_items = listItemsData();
@@ -35,6 +31,8 @@ const Items: Component = () => {
   });
 
   createEffect(() => {
+    if (!isLoggedIn()) { return; }
+
     let sse_url = getSSEUrl(getLogin(), null);
     let sse_close = liveUpdatesConnect(sse_url, (message: UpdateMessage) => {
       // don't need to update this page when there is a item change

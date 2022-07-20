@@ -4,7 +4,7 @@ import { LoginContext } from "../contexts/LoginProvider";
 import { newList } from "../core/api";
 import shared_styles from "../Shared.module.css";
 
-export type NewListSignal = {
+type NewListSignal = {
   title: string;
   description: string;
 }

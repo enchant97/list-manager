@@ -15,14 +15,11 @@ const Lists: Component = () => {
   const [getItemLists, setItemLists] = createSignal<ItemList[]>([]);
   const [listData, { refetch }] = createResource(getLogin, getLists);
 
-  createEffect(() => {
-    if (isLoggedIn() === false) {
-      navigate("/login");
-    }
-  });
-
+  createEffect(() => { if (!isLoggedIn()) { navigate("/login"); } });
 
   createEffect(() => {
+    if (!isLoggedIn()) { return; }
+
     let sse_url = getSSEUrl(getLogin(), null);
     let sse_close = liveUpdatesConnect(sse_url, (message: UpdateMessage) => {
       // don't need to update this page when there is a item change

@@ -9,7 +9,7 @@ import { liveUpdatesConnect } from "../core/helpers";
 import { ItemList, UpdateMessage } from "../core/types";
 import shared_styles from "../Shared.module.css";
 
-const ListManager: Component = () => {
+const Lists: Component = () => {
   const navigate = useNavigate();
   const { isLoggedIn, getLogin } = useContext(LoginContext);
   const [getItemLists, setItemLists] = createSignal<ItemList[]>([]);
@@ -71,4 +71,4 @@ const ListManager: Component = () => {
   );
 };
 
-export default ListManager;
+export default Lists;

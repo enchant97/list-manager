@@ -11,6 +11,7 @@ import Login from './views/Login';
 import Logout from './views/Logout';
 import Lists from './views/Lists';
 import NewList from './views/NewList';
+import Items from './views/Items';
 
 render(() =>
   <LoginProvider>
@@ -23,6 +24,7 @@ render(() =>
         <Route path='/lists'>
         <Route path='/' component={Lists} />
           <Route path='/new' component={NewList} />
+          <Route path='/:list_id' component={Items} />
         </Route>
       </Routes>
       <Footer />

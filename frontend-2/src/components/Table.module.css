@@ -1,0 +1,15 @@
+.Table {
+    width: 100%;
+    border: 1px solid black;
+    border-radius: var(--border-radius);
+}
+
+
+.Table tbody :first-child {
+    width: 100%;
+}
+
+.Table tbody tr:hover {
+    transition-duration: 500ms;
+    background-color: #e6e6e6;
+}

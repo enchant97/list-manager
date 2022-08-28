@@ -1,3 +1,4 @@
+# syntax=docker/dockerfile:1.4
 ARG PYTHON_VERSION=3.10
 
 FROM python:${PYTHON_VERSION}-slim as builder
@@ -18,7 +19,7 @@ FROM python:${PYTHON_VERSION}-alpine
     ENV PATH="/app/.venv/bin:$PATH"
     EXPOSE 8000
 
-    COPY --from=builder /app/.venv .venv
+    COPY --from=builder --link /app/.venv .venv
 
     COPY list_manager_api list_manager_api
     COPY scripts/* ./

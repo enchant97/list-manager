@@ -1,19 +1,25 @@
-FROM node:18-alpine3.16 as builder
+# syntax=docker/dockerfile:1.4
+FROM node:18-alpine3.16 as installer
 
     WORKDIR /app
 
     COPY package.json .
-    COPY tsconfig.json .
-    COPY vite.config.ts .
-    COPY index.html .
+    COPY package-lock.json .
 
     RUN npm install
+
+FROM node:18-alpine3.16 as builder
+
+    WORKDIR /app
+
+    COPY --from=installer --link /app/node_modules /app/node_modules
+
+    COPY . .
 
     COPY src src
 
     RUN npm run build
 
-FROM nginx:stable-alpine
+FROM nginxinc/nginx-unprivileged:stable-alpine
 
-    COPY --from=builder /app/dist /usr/share/nginx/html
-    COPY static static
+    COPY --from=builder --link /app/dist /usr/share/nginx/html

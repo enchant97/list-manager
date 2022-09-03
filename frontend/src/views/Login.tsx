@@ -1,7 +1,7 @@
 import { Component, createSignal, useContext, createEffect } from "solid-js";
 import { getApiUrl } from "../core/clientData";
 import { LoginContext } from "../contexts/LoginProvider";
-import { useNavigate } from "solid-app-router";
+import { useNavigate } from "@solidjs/router";
 import styles from "../Shared.module.css";
 import { getVersion } from "../core/api";
 import { LoginDetails } from "../core/types";

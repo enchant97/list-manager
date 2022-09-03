@@ -4,7 +4,7 @@ import { render } from 'solid-js/web';
 import './index.css';
 import App from './App';
 import LoginProvider from './contexts/LoginProvider';
-import { Route, Router, Routes } from 'solid-app-router';
+import { Route, Router, Routes } from '@solidjs/router';
 import Header from './components/Header';
 import Footer from './components/Footer';
 import Login from './views/Login';

@@ -1,5 +1,5 @@
 import { useContext, createEffect, Component } from "solid-js";
-import { Navigate } from "solid-app-router";
+import { Navigate } from "@solidjs/router";
 import { LoginContext } from "../contexts/LoginProvider";
 
 const Logout: Component = () => {

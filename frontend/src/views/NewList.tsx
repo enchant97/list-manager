@@ -1,4 +1,4 @@
-import { useNavigate } from "solid-app-router";
+import { useNavigate } from "@solidjs/router";
 import { Component, createEffect, createSignal, useContext } from "solid-js"
 import { LoginContext } from "../contexts/LoginProvider";
 import { newList } from "../core/api";

@@ -1,4 +1,4 @@
-import { Link, useNavigate } from "solid-app-router";
+import { Link, useNavigate } from "@solidjs/router";
 import { Component, createEffect, createResource, createSignal, onCleanup, useContext } from "solid-js";
 import ListTable from "../components/ListTable";
 import Loading from "../components/Loading";

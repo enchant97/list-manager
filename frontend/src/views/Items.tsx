@@ -1,4 +1,4 @@
-import { Link, useNavigate, useParams } from "solid-app-router";
+import { Link, useNavigate, useParams } from "@solidjs/router";
 import { Component, createEffect, createResource, createSignal, onCleanup, useContext } from "solid-js";
 import ItemsTable from "../components/ItemsTable";
 import Loading from "../components/Loading";

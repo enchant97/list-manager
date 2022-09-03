@@ -1,7 +1,7 @@
 import { Component, useContext } from 'solid-js';
 import { LoginContext } from "./contexts/LoginProvider";
 import styles from './App.module.css';
-import { Link } from 'solid-app-router';
+import { Link } from '@solidjs/router';
 import shared_styles from './Shared.module.css';
 
 const App: Component = () => {

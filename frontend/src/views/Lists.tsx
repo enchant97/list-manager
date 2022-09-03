@@ -1,8 +1,8 @@
 import { Link, useNavigate } from "@solidjs/router";
-import { Component, createEffect, createResource, createSignal, onCleanup, useContext } from "solid-js";
+import { Component, createEffect, createResource, createSignal, onCleanup } from "solid-js";
 import ListTable from "../components/ListTable";
 import Loading from "../components/Loading";
-import { LoginContext } from "../contexts/LoginProvider";
+import { useLogin } from "../contexts/LoginProvider";
 import { deleteListById, getLists } from "../core/api";
 import { getSSEUrl } from "../core/clientData";
 import { liveUpdatesConnect } from "../core/helpers";
@@ -11,16 +11,17 @@ import shared_styles from "../Shared.module.css";
 
 const Lists: Component = () => {
   const navigate = useNavigate();
-  const { isLoggedIn, getLogin } = useContext(LoginContext);
+  const [login] = useLogin();
   const [getItemLists, setItemLists] = createSignal<ItemList[]>([]);
-  const [listData, { refetch }] = createResource(getLogin, getLists);
+  const [listData, { refetch }] = createResource(login, getLists);
 
-  createEffect(() => { if (!isLoggedIn()) { navigate("/login"); } });
+  createEffect(() => { if (!login()) { navigate("/login"); } });
 
   createEffect(() => {
-    if (!isLoggedIn()) { return; }
+    let currLogin = login();
+    if (!currLogin) { return; }
 
-    let sse_url = getSSEUrl(getLogin(), null);
+    let sse_url = getSSEUrl(currLogin, null);
     let sse_close = liveUpdatesConnect(sse_url, (message: UpdateMessage) => {
       // don't need to update this page when there is a item change
       if (message.item_id !== null) return;
@@ -38,11 +39,11 @@ const Lists: Component = () => {
 
   const handleListRowClick = (list_id: number) => navigate(`/lists/${list_id}`);
   const handleListRowDeleteClick = async (list_id: number) => {
-    let login = getLogin();
+    let currLogin = login();
     let itemLists = getItemLists();
     let found_index = itemLists.findIndex(row => row.id === list_id);
-    if (found_index !== -1 && login && list_id) {
-      await deleteListById(login, list_id);
+    if (found_index !== -1 && currLogin && list_id) {
+      await deleteListById(currLogin, list_id);
       let new_lists = itemLists.filter((_, i) => i !== found_index);
       setItemLists(new_lists);
     }

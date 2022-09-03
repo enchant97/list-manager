@@ -1,6 +1,6 @@
-import { Component, createSignal, useContext, createEffect } from "solid-js";
+import { Component, createSignal, createEffect } from "solid-js";
 import { getApiUrl } from "../core/clientData";
-import { LoginContext } from "../contexts/LoginProvider";
+import { useLogin } from "../contexts/LoginProvider";
 import { useNavigate } from "@solidjs/router";
 import styles from "../Shared.module.css";
 import { getVersion } from "../core/api";
@@ -10,10 +10,10 @@ import { isCompatibleWithApi } from "../core/helpers";
 import Loading from "../components/Loading";
 
 const Login: Component = () => {
-  const { getLogin, setLogin } = useContext(LoginContext);
+  const [login, setLogin] = useLogin();
   const navigate = useNavigate();
-  const [api_url, setApiUrl] = createSignal(getLogin()?.api_url || getApiUrl());
-  const [api_key, setApiKey] = createSignal(getLogin()?.api_key || '');
+  const [api_url, setApiUrl] = createSignal(login()?.api_url || getApiUrl());
+  const [api_key, setApiKey] = createSignal(login()?.api_key || '');
   const [getLoading, setLoading] = createSignal(false);
   const [loginEntry, setLoginEntry] = createSignal<LoginDetails | null>(null);
 

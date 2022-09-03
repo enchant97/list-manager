@@ -1,8 +1,8 @@
 import { Link, useNavigate, useParams } from "@solidjs/router";
-import { Component, createEffect, createResource, createSignal, onCleanup, useContext } from "solid-js";
+import { Component, createEffect, createResource, createSignal, onCleanup } from "solid-js";
 import ItemsTable from "../components/ItemsTable";
 import Loading from "../components/Loading";
-import { LoginContext } from "../contexts/LoginProvider";
+import { useLogin } from "../contexts/LoginProvider";
 import { deleteListItemById, getListById, getListItemsByList } from "../core/api";
 import { getSSEUrl } from "../core/clientData";
 import { liveUpdatesConnect } from "../core/helpers";
@@ -12,16 +12,20 @@ import shared_styles from "../Shared.module.css";
 const Items: Component = () => {
   const navigate = useNavigate();
   const { list_id } = useParams();
-  const { isLoggedIn, getLogin } = useContext(LoginContext);
+  const [login] = useLogin();
   const [listItems, setListItems] = createSignal<ListItem[]>([]);
-  const [list, { refetch: refetchList }] = createResource({ getLogin, list_id }, async (params) => {
-    return await getListById(params.getLogin(), Number(params.list_id));
+  const [list, { refetch: refetchList }] = createResource({ login, list_id }, async (params) => {
+    let currLogin = params.login();
+    if (!currLogin) return;
+    return await getListById(currLogin, Number(params.list_id));
   });
-  const [listItemsData, { refetch: refetchListItems }] = createResource({ getLogin, list_id }, async (params) => {
-    return await getListItemsByList(params.getLogin(), Number(params.list_id));
+  const [listItemsData, { refetch: refetchListItems }] = createResource({ login, list_id }, async (params) => {
+    let currLogin = params.login();
+    if (!currLogin) return;
+    return await getListItemsByList(currLogin, Number(params.list_id));
   });
 
-  createEffect(() => { if (!isLoggedIn()) { navigate("/login"); } });
+  createEffect(() => { if (!login()) { navigate("/login"); } });
 
   createEffect(() => {
     let new_items = listItemsData();
@@ -31,9 +35,10 @@ const Items: Component = () => {
   });
 
   createEffect(() => {
-    if (!isLoggedIn()) { return; }
+    let currLogin = login();
+    if (!currLogin) { return; }
 
-    let sse_url = getSSEUrl(getLogin(), null);
+    let sse_url = getSSEUrl(currLogin, null);
     let sse_close = liveUpdatesConnect(sse_url, (message: UpdateMessage) => {
       // don't need to update this page when there is a item change
       if (message.item_id === null) {
@@ -58,8 +63,9 @@ const Items: Component = () => {
 
   const handleItemDelete = async (item_id: number) => {
     let found_index = listItems().findIndex(row => row.id === item_id);
-    if (found_index !== -1 && isLoggedIn()) {
-      await deleteListItemById(getLogin(), Number(list_id), item_id);
+    let currLogin = login();
+    if (found_index !== -1 && currLogin) {
+      await deleteListItemById(currLogin, Number(list_id), item_id);
       let new_list = listItems().filter((_, i) => i !== found_index);
       setListItems(new_list);
     }

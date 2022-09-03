@@ -1,18 +1,18 @@
-import { Component, useContext } from "solid-js";
+import { Component } from "solid-js";
 import { Link } from "@solidjs/router";
-import { LoginContext } from "../contexts/LoginProvider";
+import { useLogin } from "../contexts/LoginProvider";
 import styles from "./Header.module.css";
 import shared_styles from '../Shared.module.css';
 
 const Header: Component = () => {
-  const { isLoggedIn } = useContext(LoginContext);
+  const [login] = useLogin();
 
   return (
     <header class={styles.Header}>
       <h1>List Manager</h1>
       <nav class={styles.nav}>
         <Link class={shared_styles.button} href="/">Home</Link>
-        {isLoggedIn() === true
+        {login()
           ? <> <Link class={shared_styles.button} href="/lists">Lists</Link>
             <Link class={shared_styles.button} href="/logout">Logout</Link>
           </>

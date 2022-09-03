@@ -1,35 +1,34 @@
-import { createSignal, createContext, Accessor } from "solid-js";
+import { createSignal, createContext, useContext, JSX, createEffect } from "solid-js";
 import { LoginDetails } from "../core/types";
 import { getLoginDetails, removeLoginDetails, setLoginDetails } from "../core/clientData";
 
-export type LoginContextType = {
-  getLogin: Accessor<LoginDetails> | null;
-  setLogin: any | undefined;
-  isLoggedIn: () => boolean;
-};
-
-const [getLogin, setLogin] = createSignal(getLoginDetails());
-const isLoggedIn = () => {
-  return getLogin() !== null;
-};
-
-export const LoginContext = createContext<LoginContextType>({ getLogin: null, setLogin: undefined, isLoggedIn: isLoggedIn });
-
-function LoginProvider(props: any) {
-  const setNewLogin = (new_details: LoginDetails | null) => {
-    if (new_details === null) {
-      removeLoginDetails();
-    }
-    else {
-      setLoginDetails(new_details);
-    }
-    setLogin(getLoginDetails());
-  }
+type LoginContextProps = {
+  login?: LoginDetails
+}
+const makeLoginContext = (props: LoginContextProps) => {
+  const [login, setLogin] = createSignal<LoginDetails | null>(props.login || getLoginDetails());
+  createEffect(() => {
+    let newDetails = login();
+    if (newDetails === null) { removeLoginDetails() }
+    else { setLoginDetails(newDetails) }
+  });
+  return [
+    login,
+    setLogin,
+  ] as const;
+}
+type LoginProviderProps = {
+  login?: LoginDetails
+  children: JSX.Element
+}
+export const LoginProvider = (props: LoginProviderProps) => {
+  let accessor = makeLoginContext(props);
   return (
-    <LoginContext.Provider value={{ getLogin, setLogin: setNewLogin, isLoggedIn }}>
+    <LoginContext.Provider value={accessor}>
       {props.children}
     </LoginContext.Provider>
   );
 }
-
-export default LoginProvider;
+type LoginContextType = ReturnType<typeof makeLoginContext>;
+export const LoginContext = createContext<LoginContextType>();
+export const useLogin = () => useContext(LoginContext)!;

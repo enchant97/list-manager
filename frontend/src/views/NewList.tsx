@@ -1,6 +1,6 @@
 import { useNavigate } from "@solidjs/router";
-import { Component, createEffect, createSignal, useContext } from "solid-js"
-import { LoginContext } from "../contexts/LoginProvider";
+import { Component, createEffect, createSignal } from "solid-js"
+import { useLogin } from "../contexts/LoginProvider";
 import { newList } from "../core/api";
 import shared_styles from "../Shared.module.css";
 
@@ -11,7 +11,7 @@ type NewListSignal = {
 
 const NewList: Component = () => {
   const navigate = useNavigate();
-  const { isLoggedIn, getLogin } = useContext(LoginContext);
+  const [login] = useLogin();
   const [getNewList, setNewList] = createSignal<NewListSignal>({ title: "", description: "" });
 
   const handleTitleChange = (event: any) => {
@@ -22,13 +22,14 @@ const NewList: Component = () => {
   };
   const handleSubmit = async (event: any) => {
     event.preventDefault();
-    if (isLoggedIn()) {
-      let created_list = await newList(getLogin(), getNewList());
+    let currLogin = login();
+    if (currLogin) {
+      let created_list = await newList(currLogin, getNewList());
       navigate(`/lists/${created_list.id}`);
     }
   };
 
-  createEffect(() => { if (!isLoggedIn()) { navigate("/login"); } })
+  createEffect(() => { if (!login()) { navigate("/login"); } })
 
   return (
     <form class={shared_styles.twoCol} onSubmit={handleSubmit}>

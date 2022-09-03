@@ -1,6 +1,6 @@
 import { useNavigate, useParams } from "@solidjs/router";
-import { Component, createEffect, createSignal, onCleanup, useContext } from "solid-js";
-import { LoginContext } from "../contexts/LoginProvider";
+import { Component, createEffect, createSignal, onCleanup } from "solid-js";
+import { useLogin } from "../contexts/LoginProvider";
 import { newListItem } from "../core/api";
 import { getSSEUrl } from "../core/clientData";
 import { liveUpdatesConnect } from "../core/helpers";
@@ -14,15 +14,16 @@ type NewItemSignal = {
 const NewItem: Component = () => {
   const navigate = useNavigate();
   const { list_id } = useParams();
-  const { isLoggedIn, getLogin } = useContext(LoginContext);
+  const [login] = useLogin();
   const [getNewItem, setNewItem] = createSignal<NewItemSignal>({ title: "" });
 
-  createEffect(() => { if (!isLoggedIn()) { navigate("/login"); } })
+  createEffect(() => { if (!login()) { navigate("/login"); } })
 
   createEffect(() => {
-    if (!isLoggedIn()) { return; }
+    let currLogin = login();
+    if (!currLogin) { return; }
 
-    let sse_url = getSSEUrl(getLogin(), null);
+    let sse_url = getSSEUrl(currLogin, null);
     let sse_close = liveUpdatesConnect(sse_url, (message: UpdateMessage) => {
       if (message.item_id === null && message.list_id === Number(list_id) && message.update_type === UpdateMessageType.REMOVE) {
         // the list we are adding an item to no longer exists
@@ -37,8 +38,9 @@ const NewItem: Component = () => {
   };
   const handleSubmit = async (event: any) => {
     event.preventDefault();
-    if (isLoggedIn()) {
-      await newListItem(getLogin(), Number(list_id), getNewItem());
+    let currLogin = login();
+    if (currLogin) {
+      await newListItem(currLogin, Number(list_id), getNewItem());
       navigate(`/lists/${list_id}`);
     }
   };

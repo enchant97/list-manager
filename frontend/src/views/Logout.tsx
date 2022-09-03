@@ -1,9 +1,9 @@
-import { useContext, createEffect, Component } from "solid-js";
+import { createEffect, Component } from "solid-js";
 import { Navigate } from "@solidjs/router";
-import { LoginContext } from "../contexts/LoginProvider";
+import { useLogin } from "../contexts/LoginProvider";
 
 const Logout: Component = () => {
-  const { setLogin } = useContext(LoginContext);
+  const [_login, setLogin] = useLogin();
   createEffect(() => { setLogin(null) });
   return (<Navigate href="/" />);
 };

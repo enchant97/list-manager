@@ -2,20 +2,19 @@ import { Component, createSignal, createEffect, Show } from "solid-js";
 import { getApiUrl } from "../core/clientData";
 import { useLogin } from "../contexts/LoginProvider";
 import { useNavigate } from "@solidjs/router";
-import styles from "../Shared.module.css";
 import { getVersion } from "../core/api";
 import { LoginDetails } from "../core/types";
 import { BadAuthorisationError, NotFoundError } from "../core/exceptions";
 import { isCompatibleWithApi } from "../core/helpers";
 import Loading from "../components/Loading";
+import LoginForm from "../components/LoginForm";
 
 const Login: Component = () => {
   const [login, setLogin] = useLogin();
   const navigate = useNavigate();
-  const [api_url, setApiUrl] = createSignal(login()?.api_url || getApiUrl());
-  const [api_key, setApiKey] = createSignal(login()?.api_key || '');
+  const [apiUrl, setApiUrl] = createSignal(login()?.api_url || getApiUrl());
+  const [apiKey, setApiKey] = createSignal(login()?.api_key || undefined);
   const [getLoading, setLoading] = createSignal(false);
-  const [loginEntry, setLoginEntry] = createSignal<LoginDetails | null>(null);
 
   const validateDetails = async (new_login: LoginDetails) => {
     try {
@@ -32,15 +31,18 @@ const Login: Component = () => {
   }
 
   createEffect(async () => {
-    const new_login = loginEntry();
-    if (new_login !== null) {
+    let currApiUrl = apiUrl();
+    let currApiKey = apiKey();
+
+    if (currApiUrl && currApiKey) {
       setLoading(true);
-      let message = await validateDetails(new_login);
+      let loginDetails: LoginDetails = { api_url: currApiUrl, api_key: currApiKey }
+      let message = await validateDetails(loginDetails);
 
       setLoading(false);
 
       if (message === null) {
-        setLogin(loginEntry());
+        setLogin(loginDetails);
         navigate('/');
         return;
       }
@@ -48,31 +50,14 @@ const Login: Component = () => {
     }
   });
 
-  const handleApiUrlChange = (event: any) => {
-    setApiUrl(event.target.value);
-  }
+  const handleSubmit = (apiUrl: string, apiKey: string) => {
+    setApiUrl(apiUrl);
+    setApiKey(apiKey);
+  };
 
-  const handleApiKeyChange = (event: any) => {
-    setApiKey(event.target.value);
-  }
-
-  const handleSubmit = (event: any) => {
-    event.preventDefault();
-    let new_login = { api_key: api_key(), api_url: api_url() };
-    setLoginEntry(new_login);
-  }
-
-  // TODO Move login form to component
   return (
     <Show when={!getLoading()} fallback={<Loading />}>
-      <form class={[styles.container, styles.twoCol].join(" ")} onSubmit={handleSubmit}>
-        <h1 class={styles.fillBoth}>Login</h1>
-        <label for="api_url">Api Url:</label>
-        <input type="text" id="api_url" name="api_url" autocomplete="username" value={api_url()} onInput={handleApiUrlChange} required />
-        <label for="api_key">Api Key:</label>
-        <input type="password" id="api_key" name="api_key" autocomplete="current-password" value={api_key()} onInput={handleApiKeyChange} required />
-        <button class={styles.fillBoth} type="submit">Login</button>
-      </form>
+      <LoginForm apiUrl={apiUrl()} apiKey={apiKey()} onSubmit={handleSubmit} />
     </Show>
   );
 };

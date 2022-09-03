@@ -1,4 +1,4 @@
-import { Component, createSignal, createEffect } from "solid-js";
+import { Component, createSignal, createEffect, Show } from "solid-js";
 import { getApiUrl } from "../core/clientData";
 import { useLogin } from "../contexts/LoginProvider";
 import { useNavigate } from "@solidjs/router";
@@ -62,23 +62,18 @@ const Login: Component = () => {
     setLoginEntry(new_login);
   }
 
-  if (getLoading()) return <Loading />;
-
   // TODO Move login form to component
   return (
-    <>
-      {getLoading() === true
-        ? <Loading />
-        : <form class={[styles.container, styles.twoCol].join(" ")} onSubmit={handleSubmit}>
-          <h1 class={styles.fillBoth}>Login</h1>
-          <label for="api_url">Api Url:</label>
-          <input type="text" id="api_url" name="api_url" autocomplete="username" value={api_url()} onInput={handleApiUrlChange} required />
-          <label for="api_key">Api Key:</label>
-          <input type="password" id="api_key" name="api_key" autocomplete="current-password" value={api_key()} onInput={handleApiKeyChange} required />
-          <button class={styles.fillBoth} type="submit">Login</button>
-        </form>
-      }
-    </>
+    <Show when={!getLoading()} fallback={<Loading />}>
+      <form class={[styles.container, styles.twoCol].join(" ")} onSubmit={handleSubmit}>
+        <h1 class={styles.fillBoth}>Login</h1>
+        <label for="api_url">Api Url:</label>
+        <input type="text" id="api_url" name="api_url" autocomplete="username" value={api_url()} onInput={handleApiUrlChange} required />
+        <label for="api_key">Api Key:</label>
+        <input type="password" id="api_key" name="api_key" autocomplete="current-password" value={api_key()} onInput={handleApiKeyChange} required />
+        <button class={styles.fillBoth} type="submit">Login</button>
+      </form>
+    </Show>
   );
 };
 

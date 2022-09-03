@@ -1,5 +1,5 @@
 import { Link, useNavigate, useParams } from "@solidjs/router";
-import { Component, createEffect, createResource, createSignal, onCleanup } from "solid-js";
+import { Component, createEffect, createResource, createSignal, onCleanup, Show } from "solid-js";
 import ItemsTable from "../components/ItemsTable";
 import Loading from "../components/Loading";
 import { useLogin } from "../contexts/LoginProvider";
@@ -74,23 +74,19 @@ const Items: Component = () => {
   return (
     <div class={shared_styles.container}>
       <h1>Items</h1>
-      {list.loading
-        // Replace this with a loading text box component
-        ? <><h2>...</h2><p>...</p></>
-        : <>
+      {/* TODO Replace this with a loading text box component */}
+      <Show when={!list.loading} fallback={<><h2>...</h2><p>...</p></>}>
+        <>
           <h2>{list()?.title}</h2>
           <p>{list()?.description}</p>
         </>
-      }
+      </Show>
       <Link class={shared_styles.button} href={`/lists/${list_id}/new`}>New Item</Link>
-      {listItemsData.loading
-        ? <Loading />
-        : <>
-          {!listItems()
-            ? <p>No items found yet...</p>
-            : <ItemsTable list_items={listItems()} onDeleteRowClick={handleItemDelete} />
-          }</>
-      }
+      <Show when={!listItemsData.loading} fallback={<Loading />}>
+        <Show when={listItems()} fallback={<p>No items found yet...</p>}>
+          <ItemsTable list_items={listItems()} onDeleteRowClick={handleItemDelete} />
+        </Show>
+      </Show>
     </div>
   );
 }

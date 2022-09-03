@@ -1,5 +1,5 @@
 import { Link, useNavigate } from "@solidjs/router";
-import { Component, createEffect, createResource, createSignal, onCleanup } from "solid-js";
+import { Component, createEffect, createResource, createSignal, onCleanup, Show } from "solid-js";
 import ListTable from "../components/ListTable";
 import Loading from "../components/Loading";
 import { useLogin } from "../contexts/LoginProvider";
@@ -53,18 +53,15 @@ const Lists: Component = () => {
     <div class={shared_styles.container}>
       <h1>Lists</h1>
       <Link class={shared_styles.button} href={"/lists/new"}>New List</Link>
-      {listData.loading
-        ? <Loading />
-        : <>
-          {getItemLists().length === 0
-            ? <p>No lists found yet...</p>
-            : <ListTable
-              item_lists={getItemLists()} onListRowClick={handleListRowClick}
-              onListRowDeleteClick={handleListRowDeleteClick}
-            />
-          }</>
-      }
-
+      <Show when={!listData.loading} fallback={<Loading />}>
+        <Show when={getItemLists().length !== 0} fallback={<p>No lists found yet...</p>}>
+          <ListTable
+            item_lists={getItemLists()}
+            onListRowClick={handleListRowClick}
+            onListRowDeleteClick={handleListRowDeleteClick}
+          />
+        </Show>
+      </Show>
     </div>
   );
 };

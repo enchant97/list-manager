@@ -1,4 +1,4 @@
-import { Component } from "solid-js";
+import { Component, Show } from "solid-js";
 import { Link } from "@solidjs/router";
 import { useLogin } from "../contexts/LoginProvider";
 import styles from "./Header.module.css";
@@ -12,12 +12,12 @@ const Header: Component = () => {
       <h1>List Manager</h1>
       <nav class={styles.nav}>
         <Link class={shared_styles.button} href="/">Home</Link>
-        {login()
-          ? <> <Link class={shared_styles.button} href="/lists">Lists</Link>
+        <Show when={login()} fallback={<Link class={shared_styles.button} href="/login">Login</Link>}>
+          <>
+            <Link class={shared_styles.button} href="/lists">Lists</Link>
             <Link class={shared_styles.button} href="/logout">Logout</Link>
           </>
-          : <Link class={shared_styles.button} href="/login">Login</Link>
-        }
+        </Show>
       </nav>
     </header>
   );

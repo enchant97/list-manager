@@ -5,7 +5,6 @@ import { newListItem } from "../core/api";
 import { getSSEUrl } from "../core/clientData";
 import { liveUpdatesConnect } from "../core/helpers";
 import { UpdateMessage, UpdateMessageType } from "../core/types";
-import shared_styles from "../Shared.module.css";
 
 type NewItemSignal = {
   title: string;
@@ -46,15 +45,22 @@ const NewItem: Component = () => {
   };
 
   return (
-    <form class={shared_styles.twoCol} onSubmit={handleSubmit}>
-      <h1 class={shared_styles.fillBoth}>New Item</h1>
-      <label for="new-item-title">Title</label>
-      <input
-        type="text" name="new-item-title" id="new-item-title"
-        value={getNewItem().title} onChange={handleTitleChange} maxLength={80} autofocus required
-      />
-      <button class={shared_styles.fillBoth} type="submit">Create</button>
-      <button class={shared_styles.fillBoth} type="button" onClick={() => navigate(-1)}>Go Back</button>
+    <form class="card w-96 bg-base-100 shadow-xl mx-auto" onSubmit={handleSubmit}>
+      <div class="card-body">
+        <h1 class="card-title text-3xl mb-3">New Item</h1>
+        <div class="form-control">
+          <label class="label" for="new-item-title">Title</label>
+          <input
+            class="input input-bordered"
+            type="text" name="new-item-title" id="new-item-title"
+            value={getNewItem().title} onChange={handleTitleChange} maxLength={80} required
+          />
+        </div>
+        <div class="form-control">
+          <button class="btn btn-outline btn-success" type="submit">Create</button>
+          <button class="btn btn-outline" type="button" onClick={() => navigate(-1)}>Go Back</button>
+        </div>
+      </div>
     </form>
   );
 };

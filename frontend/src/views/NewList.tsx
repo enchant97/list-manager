@@ -2,7 +2,6 @@ import { useNavigate } from "@solidjs/router";
 import { Component, createEffect, createSignal } from "solid-js"
 import { useLogin } from "../contexts/LoginProvider";
 import { newList } from "../core/api";
-import shared_styles from "../Shared.module.css";
 
 type NewListSignal = {
   title: string;
@@ -32,22 +31,34 @@ const NewList: Component = () => {
   createEffect(() => { if (!login()) { navigate("/login"); } })
 
   return (
-    <form class={shared_styles.twoCol} onSubmit={handleSubmit}>
-      <h1 class={shared_styles.fillBoth}>New List</h1>
-      <label for="new-list-title">Title</label>
-      <input type="text" name="new-list-title" id="new-list-title"
-        value={getNewList().title}
-        onChange={handleTitleChange}
-        maxLength={80} autofocus required
-      />
-      <label for="new-list-desc">Description</label>
-      <input type="text" name="new-list-desc" id="new-list-desc"
-        value={getNewList().description}
-        onChange={handleDescriptionChange}
-        maxLength={255}
-      />
-      <button class={shared_styles.fillBoth} type="submit">Create</button>
-      <button class={shared_styles.fillBoth} type="button" onClick={() => navigate(-1)}>Go Back</button>
+    <form class="card w-96 bg-base-100 shadow-xl mx-auto" onSubmit={handleSubmit}>
+      <div class="card-body">
+        <h1 class="card-title text-3xl mb-3">New List</h1>
+        <div class="form-control">
+          <label for="new-list-title">Title</label>
+          <input
+            class="input input-bordered"
+            type="text" name="new-list-title" id="new-list-title"
+            value={getNewList().title}
+            onChange={handleTitleChange}
+            maxLength={80} autofocus required
+          />
+        </div>
+        <div class="form-control">
+          <label for="new-list-desc">Description</label>
+          <input
+            class="input input-bordered"
+            type="text" name="new-list-desc" id="new-list-desc"
+            value={getNewList().description}
+            onChange={handleDescriptionChange}
+            maxLength={255}
+          />
+        </div>
+        <div class="form-control gap-2">
+          <button class="btn btn-outline btn-success" type="submit">Create</button>
+          <button class="btn btn-outline" type="button" onClick={() => navigate(-1)}>Go Back</button>
+        </div>
+      </div>
     </form>
   );
 };

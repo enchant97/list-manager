@@ -7,7 +7,6 @@ import { deleteListItemById, getListById, getListItemsByList } from "../core/api
 import { getSSEUrl } from "../core/clientData";
 import { liveUpdatesConnect } from "../core/helpers";
 import { ListItem, UpdateMessage, UpdateMessageType } from "../core/types";
-import shared_styles from "../Shared.module.css";
 
 const Items: Component = () => {
   const navigate = useNavigate();
@@ -72,18 +71,17 @@ const Items: Component = () => {
   };
 
   return (
-    <div class={shared_styles.container}>
-      <h1>Items</h1>
+    <div class="md:container md:mx-auto px-2">
       {/* TODO Replace this with a loading text box component */}
-      <Show when={!list.loading} fallback={<><h2>...</h2><p>...</p></>}>
+      <Show when={!list.loading} fallback={<><h1>...</h1><p>...</p></>}>
         <>
-          <h2>{list()?.title}</h2>
-          <p>{list()?.description}</p>
+          <h1 class="text-3xl mb-3">{list()?.title}</h1>
+          <p class="text-lg">{list()?.description}</p>
         </>
       </Show>
-      <Link class={shared_styles.button} href={`/lists/${list_id}/new`}>New Item</Link>
+      <Link class="btn btn-outline my-3" href={`/lists/${list_id}/new`}>New Item</Link>
       <Show when={!listItemsData.loading} fallback={<Loading />}>
-        <Show when={listItems()} fallback={<p>No items found yet...</p>}>
+        <Show when={listItems().length !== 0} fallback={<p>No items found yet...</p>}>
           <ItemsTable list_items={listItems()} onDeleteRowClick={handleItemDelete} />
         </Show>
       </Show>

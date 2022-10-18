@@ -7,7 +7,6 @@ import { deleteListById, getLists } from "../core/api";
 import { getSSEUrl } from "../core/clientData";
 import { liveUpdatesConnect } from "../core/helpers";
 import { ItemList, UpdateMessage } from "../core/types";
-import shared_styles from "../Shared.module.css";
 
 const Lists: Component = () => {
   const navigate = useNavigate();
@@ -50,9 +49,9 @@ const Lists: Component = () => {
   };
 
   return (
-    <div class={shared_styles.container}>
-      <h1>Lists</h1>
-      <Link class={shared_styles.button} href={"/lists/new"}>New List</Link>
+    <div class="md:container md:mx-auto px-2">
+      <h1 class="text-3xl mb-3">Lists</h1>
+      <Link class="btn btn-outline mb-3" href={"/lists/new"}>New List</Link>
       <Show when={!listData.loading} fallback={<Loading />}>
         <Show when={getItemLists().length !== 0} fallback={<p>No lists found yet...</p>}>
           <ListTable

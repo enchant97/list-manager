@@ -1,5 +1,5 @@
 import { useNavigate } from "@solidjs/router";
-import { Component, createEffect, createSignal } from "solid-js"
+import { Component, createEffect, createSignal, onMount } from "solid-js"
 import { useLogin } from "../contexts/LoginProvider";
 import { newList } from "../core/api";
 
@@ -9,9 +9,14 @@ type NewListSignal = {
 }
 
 const NewList: Component = () => {
+  let defaultFocus: HTMLInputElement | undefined;
   const navigate = useNavigate();
   const [login] = useLogin();
   const [getNewList, setNewList] = createSignal<NewListSignal>({ title: "", description: "" });
+
+  onMount(() => defaultFocus?.focus())
+
+  createEffect(() => { if (!login()) { navigate("/login"); } })
 
   const handleTitleChange = (event: any) => {
     setNewList({ title: event.target.value, description: getNewList().description });
@@ -28,8 +33,6 @@ const NewList: Component = () => {
     }
   };
 
-  createEffect(() => { if (!login()) { navigate("/login"); } })
-
   return (
     <form class="card w-96 bg-base-100 shadow-xl mx-auto" onSubmit={handleSubmit}>
       <div class="card-body">
@@ -37,6 +40,7 @@ const NewList: Component = () => {
         <div class="form-control">
           <label for="new-list-title">Title</label>
           <input
+            ref={defaultFocus}
             class="input input-bordered"
             type="text" name="new-list-title" id="new-list-title"
             value={getNewList().title}
@@ -54,7 +58,7 @@ const NewList: Component = () => {
             maxLength={255}
           />
         </div>
-        <div class="form-control gap-2">
+        <div class="btn-group btn-group-vertical">
           <button class="btn btn-outline btn-success" type="submit">Create</button>
           <button class="btn btn-outline" type="button" onClick={() => navigate(-1)}>Go Back</button>
         </div>

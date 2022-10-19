@@ -1,4 +1,4 @@
-import { Component, createSignal } from "solid-js";
+import { Component, createSignal, onMount } from "solid-js";
 
 export type LoginFormProps = {
   apiUrl?: string
@@ -7,8 +7,11 @@ export type LoginFormProps = {
 }
 
 const LoginForm: Component<LoginFormProps> = (props) => {
+  let defaultFocus: HTMLInputElement | undefined;
   const [apiUrl, setApiUrl] = createSignal(props.apiUrl);
   const [apiKey, setApiKey] = createSignal(props.apiKey);
+
+  onMount(() => defaultFocus?.focus())
 
   const handleSubmit = (event: any) => {
     event.preventDefault();
@@ -43,6 +46,7 @@ const LoginForm: Component<LoginFormProps> = (props) => {
             <div class="form-control">
               <label class="label" for="api_key">Api Key:</label>
               <input
+                ref={defaultFocus}
                 class="input input-bordered"
                 type="password" id="api_key" name="api_key" autocomplete="current-password"
                 value={apiKey() || ""}

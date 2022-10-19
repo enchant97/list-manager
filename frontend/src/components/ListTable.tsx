@@ -17,7 +17,7 @@ const ListRow: Component<ListRowProps> = (props) => {
   return (
     <tr>
       <td>{props.item_list.title}</td>
-      <td class="flex justify-end	gap-2">
+      <td class="flex justify-end	btn-group">
         <button
           class="btn btn-outline btn-sm"
           onClick={() => props.onViewClick(props.item_list.id)}>View</button>

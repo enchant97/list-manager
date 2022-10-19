@@ -1,5 +1,5 @@
 import { useNavigate, useParams } from "@solidjs/router";
-import { Component, createEffect, createSignal, onCleanup } from "solid-js";
+import { Component, createEffect, createSignal, onCleanup, onMount } from "solid-js";
 import { useLogin } from "../contexts/LoginProvider";
 import { newListItem } from "../core/api";
 import { getSSEUrl } from "../core/clientData";
@@ -11,13 +11,15 @@ type NewItemSignal = {
 }
 
 const NewItem: Component = () => {
+  let defaultFocus: HTMLInputElement | undefined;
   const navigate = useNavigate();
   const { list_id } = useParams();
   const [login] = useLogin();
   const [getNewItem, setNewItem] = createSignal<NewItemSignal>({ title: "" });
 
-  createEffect(() => { if (!login()) { navigate("/login"); } })
+  onMount(() => defaultFocus?.focus())
 
+  createEffect(() => { if (!login()) { navigate("/login"); } })
   createEffect(() => {
     let currLogin = login();
     if (!currLogin) { return; }
@@ -51,12 +53,13 @@ const NewItem: Component = () => {
         <div class="form-control">
           <label class="label" for="new-item-title">Title</label>
           <input
+            ref={defaultFocus}
             class="input input-bordered"
             type="text" name="new-item-title" id="new-item-title"
             value={getNewItem().title} onChange={handleTitleChange} maxLength={80} required
           />
         </div>
-        <div class="form-control">
+        <div class="btn-group btn-group-vertical">
           <button class="btn btn-outline btn-success" type="submit">Create</button>
           <button class="btn btn-outline" type="button" onClick={() => navigate(-1)}>Go Back</button>
         </div>

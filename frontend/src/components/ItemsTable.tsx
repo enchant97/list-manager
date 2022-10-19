@@ -15,7 +15,7 @@ const ItemRow: Component<ItemRowProps> = (props) => {
   return (
     <tr>
       <td>{props.item.title}</td>
-      <td class="flex justify-end	gap-2">
+      <td class="flex justify-end	btn-group">
         <button
           class="btn btn-outline btn-error btn-sm"
           onClick={() => { props.onDeleteClick(props.item.id) }}>Delete</button>

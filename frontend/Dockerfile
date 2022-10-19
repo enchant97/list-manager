@@ -4,7 +4,6 @@ FROM node:18-alpine3.16 as installer
     WORKDIR /app
 
     COPY package.json .
-    COPY package-lock.json .
 
     RUN npm install
 

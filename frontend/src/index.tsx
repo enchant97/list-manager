@@ -13,26 +13,30 @@ import Lists from './views/Lists';
 import NewList from './views/NewList';
 import Items from './views/Items';
 import NewItem from './views/NewItem';
+import { ModalController, ModalProvider } from './contexts/ModalProvider';
 
 render(() =>
   <LoginProvider>
-    <Router>
-      <Header />
-      <Routes>
-        <Route path='/' component={App} />
-        <Route path='/login' component={Login} />
-        <Route path='/logout' component={Logout} />
-        <Route path='/lists'>
-          <Route path='/' component={Lists} />
-          <Route path='/new' component={NewList} />
-          <Route path='/:list_id'>
-            <Route path='/' component={Items} />
-            <Route path='/new' component={NewItem} />
+    <ModalProvider>
+      <ModalController />
+      <Router>
+        <Header />
+        <Routes>
+          <Route path='/' component={App} />
+          <Route path='/login' component={Login} />
+          <Route path='/logout' component={Logout} />
+          <Route path='/lists'>
+            <Route path='/' component={Lists} />
+            <Route path='/new' component={NewList} />
+            <Route path='/:list_id'>
+              <Route path='/' component={Items} />
+              <Route path='/new' component={NewItem} />
+            </Route>
           </Route>
-        </Route>
-      </Routes>
-      <Footer />
-    </Router>
+        </Routes>
+        <Footer />
+      </Router>
+    </ModalProvider>
   </LoginProvider>,
   document.getElementById('root') as HTMLElement
 );

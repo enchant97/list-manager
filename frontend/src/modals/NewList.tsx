@@ -1,11 +1,12 @@
 import { useNavigate } from "@solidjs/router";
-import { Component, createSignal } from "solid-js"
+import { Component } from "solid-js"
+import { createStore } from "solid-js/store";
 import { useLogin } from "../contexts/LoginProvider";
 import { useModal } from "../contexts/ModalProvider";
 import { newList } from "../core/api";
 import ModalForm from "./ModalForm";
 
-type NewListSignal = {
+type NewListStore = {
   title: string;
   description: string;
 }
@@ -14,18 +15,12 @@ const NewList: Component = () => {
   const navigate = useNavigate();
   const [login] = useLogin();
   const { setModal } = useModal();
-  const [getNewList, setNewList] = createSignal<NewListSignal>({ title: "", description: "" });
+  const [form, setForm] = createStore<NewListStore>({ title: "", description: "" });
 
-  const handleTitleChange = (event: any) => {
-    setNewList({ title: event.target.value, description: getNewList().description });
-  };
-  const handleDescriptionChange = (event: any) => {
-    setNewList({ title: getNewList().title, description: event.target.value });
-  };
   const handleSubmit = async () => {
     let currLogin = login();
     if (currLogin) {
-      let created_list = await newList(currLogin, getNewList());
+      let created_list = await newList(currLogin, form);
       setModal(null);
       navigate(`/lists/${created_list.id}`);
     }
@@ -38,8 +33,8 @@ const NewList: Component = () => {
         <input
           class="input input-bordered"
           type="text" name="new-list-title" id="new-list-title"
-          value={getNewList().title}
-          onChange={handleTitleChange}
+          value={form.title}
+          oninput={(e: any) => { setForm("title", e.target.value) }}
           maxLength={80} required
         />
       </div>
@@ -48,8 +43,8 @@ const NewList: Component = () => {
         <input
           class="input input-bordered"
           type="text" name="new-list-desc" id="new-list-desc"
-          value={getNewList().description}
-          onChange={handleDescriptionChange}
+          value={form.description}
+          oninput={(e: any) => { setForm("description", e.target.value) }}
           maxLength={255}
         />
       </div>

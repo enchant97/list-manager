@@ -1,19 +1,22 @@
 import { Link, useNavigate } from "@solidjs/router";
-import { Component, createEffect, createResource, createSignal, onCleanup, Show } from "solid-js";
+import { Component, createEffect, createResource, createSignal, lazy, onCleanup, Show } from "solid-js";
 import ListTable from "../components/ListTable";
 import Loading from "../components/Loading";
 import { useLogin } from "../contexts/LoginProvider";
+import { useModal } from "../contexts/ModalProvider";
 import { deleteListById, getLists } from "../core/api";
 import { getSSEUrl } from "../core/clientData";
 import { liveUpdatesConnect } from "../core/helpers";
 import { ItemList, UpdateMessage } from "../core/types";
+import NewList from "../modals/NewList";
 
 const Lists: Component = () => {
   const navigate = useNavigate();
+  const { setModal } = useModal();
   const [login] = useLogin();
   const [getItemLists, setItemLists] = createSignal<ItemList[]>([]);
   const [listData, { refetch }] = createResource(login, getLists);
-
+  const modal = <NewList/>;
   createEffect(() => { if (!login()) { navigate("/login"); } });
 
   createEffect(() => {
@@ -51,7 +54,7 @@ const Lists: Component = () => {
   return (
     <div class="md:container md:mx-auto px-2">
       <h1 class="text-3xl mb-3">Lists</h1>
-      <Link class="btn btn-outline mb-3" href={"/lists/new"}>New List</Link>
+      <button class="btn btn-outline mb-3" onclick={() => { setModal(modal) }}>New List</button>
       <Show when={!listData.loading} fallback={<Loading />}>
         <Show when={getItemLists().length !== 0} fallback={<p>No lists found yet...</p>}>
           <ListTable

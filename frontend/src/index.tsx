@@ -10,7 +10,6 @@ import Footer from './components/Footer';
 import Login from './views/Login';
 import Logout from './views/Logout';
 import Lists from './views/Lists';
-import NewList from './views/NewList';
 import Items from './views/Items';
 import NewItem from './views/NewItem';
 import { ModalController, ModalProvider } from './contexts/ModalProvider';
@@ -18,8 +17,8 @@ import { ModalController, ModalProvider } from './contexts/ModalProvider';
 render(() =>
   <LoginProvider>
     <ModalProvider>
-      <ModalController />
       <Router>
+        <ModalController />
         <Header />
         <Routes>
           <Route path='/' component={App} />
@@ -27,7 +26,6 @@ render(() =>
           <Route path='/logout' component={Logout} />
           <Route path='/lists'>
             <Route path='/' component={Lists} />
-            <Route path='/new' component={NewList} />
             <Route path='/:list_id'>
               <Route path='/' component={Items} />
               <Route path='/new' component={NewItem} />

@@ -3,8 +3,8 @@ import ModalOuter from "./ModalOuter";
 
 type ModalFormProps = {
   title: string
-  onSubmit: () => {}
-  onCancel: () => {}
+  onSubmit: () => void
+  onCancel: () => void
   children: JSX.Element
 }
 
